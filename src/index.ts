@@ -1,20 +1,21 @@
 import express from "express"
-import connectDb from "../DB/db.config"
+import connectDb from "./DB/db.config"
 import dotenv from "dotenv"
-dotenv.config()
+import userRoutes from "./Routers/userRoutes"
 import { Request,Response } from "express"
 import messageRoutes from "./Routers/messageRoute"
-import subscribeRoute from "./Routers/subscribe"
+import subscribeRoute from "./Routers/subscribeRoute"
+dotenv.config()
 const app = express()
 app.use(express.json())
 connectDb()
-const port=process.env.PORT||5000
+const port=process.env.PORT||3000
  app.get('/api',(req:Request,res:Response)=>{
       res.send('Welcome to my api site.')
  })
   app.use('/api',subscribeRoute)
   app.use('/api',messageRoutes)
-
+  app.use('/api',userRoutes)
 
 
 

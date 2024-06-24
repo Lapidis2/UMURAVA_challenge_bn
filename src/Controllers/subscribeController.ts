@@ -1,4 +1,4 @@
-import subscribeModal from "../Models/subscribe";
+import subscribeModal from "../Models/subscribeModal";
 import { Request,Response } from "express";
 import nodemailer from "nodemailer"
 import dotenv from "dotenv"
@@ -32,13 +32,13 @@ const transporter = nodemailer.createTransport({
         await transporter.sendMail({
             from: process.env.ADMIN_EMAIL,
             to: email,
-            subject: "Welcome to my Blog newsletter",
+            subject: "Welcome to my Blog website",
             html:`<p>Thank you for subscribing to my newsletter, you will be alerted when new blogs are posted!!
             <p>Kind Regards,</p>
             <p>Jean Pierre</p>`
         });
 
-        res.status(200).json({message: "Mail sent successfully"});
+        res.status(200).json({message: "subscription added successfully"});
         subscribeModal.create({ email });
     } catch(err){
         console.log(err);
