@@ -25,7 +25,7 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        default:'Guest'
+        default:'Guest'||'Admin'
     },
     createdAt:{
         type:Date,
