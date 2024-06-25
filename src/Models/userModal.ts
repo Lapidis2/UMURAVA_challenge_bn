@@ -5,9 +5,11 @@ interface userModal{
     email:String,
     password:string,
     role:String,
-    createdAt:Date
+    confirmationToken:String,
+    isConfirmed: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date
+    createdAt:Date
 }
 
 const userSchema=new mongoose.Schema({
@@ -31,7 +33,14 @@ const userSchema=new mongoose.Schema({
         type:Date,
         default: Date.now
     },
-
+    
+    isConfirmed:{
+     type: Boolean,
+     default:false
+    },
+    confirmationToken:{
+        type:String
+    } ,
     resetPasswordToken: {
         type:String
       

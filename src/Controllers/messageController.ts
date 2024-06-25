@@ -25,11 +25,13 @@ export const createMessage= async (req:Request,res:Response)=>{
 export const getMessage= async(req:Request,res:Response)=>{
     try {
         const messageData= await messageModal.find({})
-        res.status(200).json( messageData)
+        res.status(200).json({messageData:'Published messages are:',data:messageData})
     } catch (error: any) {
+      console.error("Failed to fetch messages:", error);
         res.status(500).json({error:"Failed to fetch messages"})
     }
 }
+
 
 
 const messageNotify= async (username: string, email: string, message: string): Promise<void> => {
@@ -75,11 +77,6 @@ const messageNotify= async (username: string, email: string, message: string): P
       throw error; 
     }
   };
-  
-
-
-
-
 export const replyMessage= async(req:Request,res:Response)=>{
     const {email,replyMessage}=req.body
     try {
@@ -136,7 +133,27 @@ export const replyMessage= async(req:Request,res:Response)=>{
     }
   };
   
+  export const deleteMessage = async (req: Request, res: Response)=> {
+    try {
+      const { userId } = req.params;
+      const message = await messageModal.findByIdAndDelete(userId);
+  
+      if (message) {
+        res.status(200).json({
+          message: "Message Deleted!"
+        });
+      } else {
+        res.status(404).json({
+          message: "Message not found"
+        });
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      res.status(500).json({
+        message: "Internal Server Error"
+      });
+    }
 
-
+  }
 
 

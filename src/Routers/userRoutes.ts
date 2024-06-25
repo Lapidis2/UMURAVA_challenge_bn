@@ -1,8 +1,9 @@
 import express, { Router } from "express";
-import { registerUser,loginUser,getAllUser,getSingleUser,deleteUser,updateUser,requestPasswordReset,resetPassword } from "../Controllers/userController";
+import { registerUser,confirmEmail,loginUser,getAllUser,getSingleUser,deleteUser,updateUser,requestPasswordReset,resetPassword } from "../Controllers/userController";
 const route=express.Router()
 
 route.post('/registerUser',registerUser)
+route.put('/confirmEmail/:token',confirmEmail)
 route.post('/login',loginUser)
 route.get('/getAllUser',getAllUser)
 route.get('/getSingleUser/:userId',getSingleUser)

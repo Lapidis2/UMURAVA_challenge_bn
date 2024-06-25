@@ -5,6 +5,7 @@ import userRoutes from "./Routers/userRoutes"
 import { Request,Response } from "express"
 import messageRoutes from "./Routers/messageRoute"
 import subscribeRoute from "./Routers/subscribeRoute"
+import blogRoutes from "./Routers/blogRoutes"
 dotenv.config()
 const app = express()
 app.use(express.json())
@@ -16,14 +17,8 @@ const port=process.env.PORT||3000
   app.use('/api',subscribeRoute)
   app.use('/api',messageRoutes)
   app.use('/api',userRoutes)
-
-
-
-
-
-
-
-
+  app.use('/api',blogRoutes)
+ 
 
  app.listen(port,()=>{
     console.log(`Server is running on ${port}`)

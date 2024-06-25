@@ -6,33 +6,95 @@ import  jwt from "jsonwebtoken"
 import crypto from "crypto"
 import nodemailer from"nodemailer"
 dotenv.config()
-export const registerUser=  async(req:Request,res:Response)=>{
-    try {
-        const {userName,email,password,role} = req.body;
-        const existUser= await userModal.findOne({email})
-        if(userName=="" && email=="" &&  password==""){
-            res.status(400).json({message:'Please fill out all field'})
-        }
-        if(existUser) {
-                res.status(409).json({message:'user already exist'})
-           }
-           
-      const passwordHash= await bcrypt.hash(password,10)
-      const user=await userModal.create({
-          userName,
-          email,
-          password:passwordHash,
-          role: role || 'Guest'
 
-      })
-      await user.save()
-    res.status(200).json({message:'Registration successfull!',user:user})
-              
+
+export const registerUser = async (req: Request, res: Response) => {
+    try {
+        const { userName, email, password, role } = req.body;
+        const existingUser = await userModal.findOne({ email });
+
+        if (!userName || !email || !password) {
+            return res.status(400).json({ message: 'Please fill out all fields' });
+        }
+
+        if (existingUser) {
+            return res.status(409).json({ message: 'User already exists' });
+        }
+
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        const newUser = new userModal({
+            userName,
+            email,
+            password: passwordHash,
+            role: role || 'Guest',
+            isConfirmed: false, 
+            confirmationToken: crypto.randomBytes(20).toString('hex')
+        });
+
+        await newUser.save();
+
+     
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.ADMIN_EMAIL,
+                pass: process.env.ADMIN_PSWD,
+            },
+        });
+
+        const confirmationLink = `http://${req.headers.host}/confirm/${newUser.confirmationToken}`;
+
+        const sendEmailResponse = await transporter.sendMail({
+            from: process.env.ADMIN_EMAIL,
+            to: email,
+            subject: 'Account Confirmation',
+            html: `
+                <div>
+                    <p>Dear ${userName},</p>
+                    <p>Thank you for registering with us.</p>
+                    <p>Please click <a href="${confirmationLink}">here</a> to confirm your email address.</p>
+                </div>
+            `,
+        });
+
+        if (sendEmailResponse) {
+            res.status(201).json({
+                success: true,
+                message: 'User Created Successfully. Please check your email for confirmation instructions.',
+                user: newUser,
+            });
+        } else {
+            throw new Error('Failed to send confirmation email');
+        }
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || 'Failed to sign up' });
     }
-        catch (error:any) {
-        res.status(500).json({message:'Failed to sign up'})
+};
+
+
+
+export const confirmEmail = async (req: Request, res: Response) => {
+    const { token } = req.params;
+
+    try {
+        const user = await userModal.findOne({ confirmationToken: token });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Invalid or expired token' });
+        }
+
+        
+        user.isConfirmed = true;
+        user.confirmationToken = undefined;
+        await user.save();
+
+        res.status(200).json({ message: 'Email confirmed successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to confirm email' });
     }
-}
+};
+
 
 export const loginUser= async(req:Request,res:Response)=>{
     try {
