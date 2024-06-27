@@ -130,7 +130,7 @@ export const loginUser= async(req:Request,res:Response)=>{
 }
  export const getAllUser= async(req:Request,res:Response)=>{
     try {
-        const users= await userModal.find().select("-Password")
+        const users= await userModal.find().select("-Password").sort({createdAt: -1})
         if(!users){
             res.status(400).json({message:"No registered user found"})
         }
@@ -220,8 +220,9 @@ export const requestPasswordReset= async(req:Request,res:Response)=>{
       });
   
       const response = {
-        to: user.email,
         from: process.env.ADMIN_EMAIL,
+         to: user.email,
+        
         subject: 'Password Reset',
         text: `You are receiving this because you ${user.userName} have requested the reset of the password for your account.\n\n
           Please click on the following link, or paste this into your browser to complete the process:\n\n

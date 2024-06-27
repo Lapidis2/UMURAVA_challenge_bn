@@ -31,7 +31,6 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
       return res.status(403).json({ message: "Access denied. Invalid token." });
     }
   } catch (error) {
-    console.error('Error during token verification:', error);
     return res.status(403).json({ message: "Error during token verification!" });
   }
 };
