@@ -7,7 +7,7 @@ interface blogModal{
     content:String,
     imageUrl:String,
     views:[],
-    likes:Number,
+    likes:[],
     shares:[],
     comment:[{
         author:String,
@@ -24,16 +24,22 @@ const blogSchema= new mongoose.Schema<blogModal>({
          imageUrl:{type:String},
          createdAt:{type:Date,default: Date.now()},
          views:[{type:mongoose.Types.ObjectId,ref:"User"}],
-         likes:{type:Number,default:0},
-         shares:[{type:mongoose.Types.ObjectId,ref:"User"}],
-         comment:[{
-            author:{type:String},
-            date:{
-                type: Date,
-                default: Date.now()
-            }
-         }],
+         likes:[{type:mongoose.Types.ObjectId,ref:"User"}],
+        
 
-})
+         shares:[{type:mongoose.Types.ObjectId,ref:"User"}],
+        comment: [
+            {
+                text: String,
+                created: { type: Date, default: Date.now },
+                postedBy: {
+                    type: mongoose.Types.ObjectId,
+                    ref: "User",
+                },
+            },
+        ],
+    },
+    { timestamps: true 
+    })
 const blogModal=mongoose.model("blogs",blogSchema)
 export default blogModal

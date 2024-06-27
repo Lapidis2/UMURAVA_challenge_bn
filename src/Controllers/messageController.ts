@@ -7,7 +7,6 @@ dotenv.config()
 export const createMessage= async (req:Request,res:Response)=>{
     try {
         const {username,email,message}=req.body;
-        console.log(req.body)
         if (!username || !email || !message) {
             return res.status(400).json({ message: 'Username, email, and message are required' });
         }
@@ -18,7 +17,7 @@ export const createMessage= async (req:Request,res:Response)=>{
         res.status(200).json({message:'The message sent successfull',data:newMessage})
         
     } catch (err: any) {
-    console.log(err)
+  
            res.status(500).json({message:"Error while sending a message"})
     }
 } 

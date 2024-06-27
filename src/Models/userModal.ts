@@ -1,6 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
 interface userModal{
+    id:String
     userName:String,
     email:String,
     password:string,

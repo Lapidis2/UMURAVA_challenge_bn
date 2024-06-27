@@ -7,6 +7,11 @@ import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import subscribeModal from "../Models/subscribeModal";
 import nodemailer from "nodemailer"
+import { DecodedUserPayload } from "../middleWare/verifyToken";
+
+ interface AuthenticatedRequest extends Request {
+    user?:DecodedUserPayload; 
+}
 dotenv.config();
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -143,6 +148,7 @@ export const getSingleBlog = async ( req: Request,res: Response)=>{
 export const deleteBlog = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    
     const deleteD = await blogModal.findByIdAndDelete(id,{new:true});
     if(deleteD){
       res.status(200).json({
@@ -220,28 +226,34 @@ export const updateBlog = async (req: Request, res: Response) => {
 };
 
 
-export const addLike = async(req:Request,res:Response)=>{
+export const addLike = async(req:AuthenticatedRequest,res:Response)=>{
   try {
-    const {action} = req.body
-    
-    const {id} = req.params
-    const blogToLike:any = await blogModal.findById(id)
-    if(action === "like"){
-
-      blogToLike.likes++
-    }else{
-      if(blogToLike.likes>0){
-+
-        blogToLike.likes--    
-      }
-    }
-
-    await blogToLike.save()
-    io.emit("likeUpdate", {blogId: id,likes: blogToLike.likes})
-    res.status(200).json({message: "success"})
+    const userId=req.user?.userId 
+    const blogId=req.params.blogId
+    const blogToLike:any = await blogModal.findById(blogId)
+   
  
-  } catch (error:any) {
-    res.status(500).json({messsage:error.message})
+  if(!blogToLike){
+    return res.status(404).json({success:false ,message:'blog not found'})
+  }
+  
+  const index=blogToLike.likes.indexOf(userId)
+     if(index !==-1){
+         blogToLike.likes.splice(index,1)
+          await blogToLike.save()
+        return  res.status(200).json({success:true ,message:'user has unliked blog'})
+
+     }
+     else{
+     blogToLike.likes.push(userId)
+      await blogToLike.save()
+    return res.status(200).json({success:true ,message:'Like added to blog successfully'})
+    
+     }
+    
+  } 
+  catch (error:any) {
+    return res.status(500).json({messsage:'internal server',error})
     
   }
 }

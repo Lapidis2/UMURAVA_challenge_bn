@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import dotenv from "dotenv"
+import userModal from '../Models/userModal';
 dotenv.config()
 interface AuthenticatedRequest extends Request {
   user?: DecodedUserPayload;
 }
 
-interface DecodedUserPayload {
+export interface DecodedUserPayload {
   userId: string;
   email: string;
   role: string;
@@ -23,9 +24,10 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
   try {
     const secret = process.env.SECRETE_KEY as string;
     const decoded = jwt.verify(token, secret) as DecodedUserPayload;
-
+    
     if (decoded) {
-      (req as AuthenticatedRequest).user = decoded;
+      (req as any).user = decoded;
+      
       next();
     } else {
       return res.status(403).json({ message: "Access denied. Invalid token." });

@@ -271,7 +271,13 @@ export const resetPassword= async(req:Request,res:Response)=>{
     }
 }
 
-
+export const logout=async(req:Request,res:Response)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}
 
 
 

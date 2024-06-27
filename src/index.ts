@@ -47,7 +47,7 @@ const port=process.env.PORT||3000
   app.use('/api',messageRoutes)
   app.use('/api',userRoutes)
   app.use('/api',blogRoutes)
- 
+  
 
  app.listen(port,()=>{
     console.log(`Server is running on ${port}`)
