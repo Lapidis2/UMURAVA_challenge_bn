@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response,NextFunction } from "express";
 import blogModal from "../Models/blogModal";
 import multer, { diskStorage } from "multer";
 import path from "path";
@@ -259,3 +259,23 @@ export const addLike = async(req:AuthenticatedRequest,res:Response)=>{
     
   }
 }
+
+
+export const addComment = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {blogId}=req.params
+    const {author,content}=req.body
+    const blog= await blogModal.findById(blogId)
+    if(!blog){
+      res.status(404).json({message:'blog not found'})
+    }
+    const newcomment:any= {content,author}
+    blog?.comment.push(newcomment)
+    await blog?.save()
+    res.status(200).json({message:'Comment added successfully',comment:newcomment})
+    
+  } catch (error) {
+    res.status(500).json({message:'internal server error',error})
+  }
+};
+

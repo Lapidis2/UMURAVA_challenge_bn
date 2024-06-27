@@ -10,7 +10,7 @@ interface blogModal{
     likes:[],
     shares:[],
     comment:[{
-        author:String,
+        author:mongoose.Types.ObjectId,
         content:String,
          date  :Date
     }],
@@ -23,19 +23,18 @@ const blogSchema= new mongoose.Schema<blogModal>({
          content:{type:String},
          imageUrl:{type:String},
          createdAt:{type:Date,default: Date.now()},
-         views:[{type:mongoose.Types.ObjectId,ref:"User"}],
          likes:[{type:mongoose.Types.ObjectId,ref:"User"}],
-        
-
-         shares:[{type:mongoose.Types.ObjectId,ref:"User"}],
+    
         comment: [
             {
-                text: String,
+                  author:String,
+                
+                content: {type:String
+                         
+                     },
                 created: { type: Date, default: Date.now },
-                postedBy: {
-                    type: mongoose.Types.ObjectId,
-                    ref: "User",
-                },
+                
+              
             },
         ],
     },
