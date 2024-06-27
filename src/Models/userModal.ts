@@ -10,7 +10,9 @@ interface userModal{
     isConfirmed: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date
+    token:String[]
     createdAt:Date
+
 }
 
 const userSchema=new mongoose.Schema({
@@ -30,6 +32,7 @@ const userSchema=new mongoose.Schema({
         type:String,
         default:'Guest'||'Admin'
     },
+    token:[{type:String}],
     createdAt:{
         type:Date,
         default: Date.now

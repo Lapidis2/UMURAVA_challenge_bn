@@ -271,13 +271,34 @@ export const resetPassword= async(req:Request,res:Response)=>{
     }
 }
 
-export const logout=async(req:Request,res:Response)=>{
-    try {
-        
-    } catch (error) {
-        
+export const logout = async (req: Request, res: Response) => {
+  const authHeader = req.headers['authorization'];
+
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const token = authHeader.split(' ')[1]; 
+    const secret = process.env.SECRETE_kEY as string;
+
+  try {
+     const decoded: any = jwt.verify(token, secret );
+    const userId = decoded.userId;
+    const user = await userModal.findOne({_id:userId});
+  
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-}
+    user.token = user.token.filter((t:String) => t !== token);
+    await user.save();
+
+    return res.status(200).json({ message: 'Logout successful' });
+
+  } catch (error) {
+    console.error('Error during logout:', error);
+    return res.status(500).json({ message: 'Internal server error', error });
+  }
+};
 
 
 
