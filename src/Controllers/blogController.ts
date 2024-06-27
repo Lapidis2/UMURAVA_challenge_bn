@@ -241,12 +241,14 @@ export const addLike = async(req:AuthenticatedRequest,res:Response)=>{
      if(index !==-1){
          blogToLike.likes.splice(index,1)
           await blogToLike.save()
+        io.emit("likeUpdate", { blogId, likes: blogToLike.likes });
         return  res.status(200).json({success:true ,message:'user has unliked blog'})
 
      }
      else{
      blogToLike.likes.push(userId)
       await blogToLike.save()
+      io.emit("likeUpdate", { blogId, likes: blogToLike.likes });
     return res.status(200).json({success:true ,message:'Like added to blog successfully'})
     
      }
