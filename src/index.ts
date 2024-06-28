@@ -41,7 +41,7 @@ connectDb()
 
 const port=process.env.PORT||3000
  app.use('/api',(req:Request,res:Response)=>{
-      res.send('Welcome to Jean Pierre api site.')
+      res.status(200).json({Message:'Welcome to Jean Pierre api site.'})
  })
   app.use('/api',subscribeRoute)
   app.use('/api',messageRoutes)
