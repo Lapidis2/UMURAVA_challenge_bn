@@ -100,16 +100,16 @@ export const loginUser= async(req:Request,res:Response)=>{
     try {
         const {email,password}=req.body;
         if(email=='' || password==''){
-            res.status(400).json({message:'Email and Password are required'})
+           return res.status(400).json({message:'Email and Password are required'})
         }
         const user= await userModal.findOne({email})
         if(!user){
-            res.status(400).json({message:'Invalid email or password.'})
+           return res.status(400).json({message:'Invalid email or password.'})
         }
         else{
         const isPasswordCorrect=await bcrypt.compareSync(password,user.password)
         if(!isPasswordCorrect){
-           res.status(400).json({message:'invalid credentials'})
+          return res.status(400).json({message:'invalid credentials'})
         }
         const token=jwt.sign(
             {userId:user._id,
@@ -122,10 +122,11 @@ export const loginUser= async(req:Request,res:Response)=>{
              }
             )
           
-        res.status(200).json({message:'login successfull',token,user})
+        return res.status(200).json({message:'login successfull',token,user})
         }
     } catch (error:any) {
-        res.status(500).json({message:'Failed to sign in',error})
+        console.log(error)
+        return res.status(500).json({message:'Failed to sign in',error})
     }
 }
  export const getAllUser= async(req:Request,res:Response)=>{
