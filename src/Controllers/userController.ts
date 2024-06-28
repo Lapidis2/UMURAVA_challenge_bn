@@ -124,8 +124,8 @@ export const loginUser= async(req:Request,res:Response)=>{
           
         res.status(200).json({message:'login successfull',token,user})
         }
-    } catch (error) {
-        res.status(500).json({message:'Failed to sign in'})
+    } catch (error:any) {
+        res.status(500).json({message:'Failed to sign in',error})
     }
 }
  export const getAllUser= async(req:Request,res:Response)=>{
