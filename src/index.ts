@@ -11,6 +11,7 @@ import{Server}from "socket.io"
 import cors from "cors"
 import http from "http"
 import dotenv from "dotenv"
+import { isAuthenticated } from "./middleWare/verifyToken"
 dotenv.config()
 const app = express()
 const server = http.createServer(app);
@@ -41,15 +42,18 @@ app.use(
 connectDb()
 
 const port=process.env.PORT||3000
- app.use('/api',(req:Request,res:Response)=>{
-      res.status(200).json({Message:'Welcome to Jean Pierre api site.'})
- })
+
   app.use('/api',subscribeRoute)
   app.use('/api',messageRoutes)
   app.use('/api',userRoutes)
   app.use('/api',blogRoutes)
   
 
+
+
+   app.get('/api',(req:Request,res:Response)=>{
+      res.status(200).json({Message:'Welcome to Jean Pierre api site.'})
+ })
  app.listen(port,()=>{
     console.log(`Server is running on ${port}`)
  })

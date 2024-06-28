@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import dotenv from "dotenv"
-import userModal from '../Models/userModal';
 dotenv.config()
 interface AuthenticatedRequest extends Request {
   user?: DecodedUserPayload;
