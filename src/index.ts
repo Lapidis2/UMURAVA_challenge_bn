@@ -40,8 +40,8 @@ app.use(
 connectDb()
 
 const port=process.env.PORT||3000
- app.get('/api',(req:Request,res:Response)=>{
-      res.send('Welcome to my api site.')
+ app.use('/api',(req:Request,res:Response)=>{
+      res.send('Welcome to Jean Pierre api site.')
  })
   app.use('/api',subscribeRoute)
   app.use('/api',messageRoutes)
