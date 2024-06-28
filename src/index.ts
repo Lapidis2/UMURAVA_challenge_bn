@@ -16,9 +16,9 @@ const app = express()
 const server = http.createServer(app);
 const io = new Server(server,{
   cors:{
-    origin: "*",
+    origin: "http://localhost:3000/api",
     methods: ["GET","POST"],
-    credentials:true
+  
   }
 })
 
@@ -41,7 +41,7 @@ app.use(
 connectDb()
 
 const port=process.env.PORT||3000
- app.use('/api',(req:Request,res:Response)=>{
+ app.get('/api',(req:Request,res:Response)=>{
       res.status(200).json({Message:'Welcome to Jean Pierre api site.'})
  })
   app.use('/api',subscribeRoute)
