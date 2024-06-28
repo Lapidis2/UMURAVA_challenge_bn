@@ -6,12 +6,23 @@ dotenv.config()
 
 
 
-const connectDb=async()=>{
-    try {
-         await mongoose.connect(process.env.Local_db!)
-         console.log("Database connected success!")
-    } catch (error:any) {
-        console.log("Error during conncecting db",error.message)
-    }
+function isDefined<T>(arg: T | undefined): arg is T {
+  return arg !== undefined;
 }
-  export default connectDb;
+
+async function connectToMongoDB() {
+  try {
+    if (isDefined(process.env.MONGODB_URL)) {
+      await mongoose.connect(process.env.MONGODB_URL, {
+        serverSelectionTimeoutMS: 30000,
+      });
+      console.log('MongoDB connected successfully');
+    } else {
+      console.error('MONGODB_URL environment variable is not defined.');
+    }
+  } catch (error:any) {
+    console.error('Error connecting to MongoDB:', error.message);
+  }
+}
+connectToMongoDB();
+  export default connectToMongoDB;

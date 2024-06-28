@@ -1,6 +1,6 @@
 import express from "express"
 import multer from "multer"
-import connectDb from "./DB/db.config"
+import connectToMongoDB from "./DB/db.config"
 import userRoutes from "./Routers/userRoutes"
 import { Request,Response } from "express"
 import messageRoutes from "./Routers/messageRoute"
@@ -11,7 +11,6 @@ import{Server}from "socket.io"
 import cors from "cors"
 import http from "http"
 import dotenv from "dotenv"
-import { isAuthenticated } from "./middleWare/verifyToken"
 dotenv.config()
 const app = express()
 const server = http.createServer(app);
@@ -39,7 +38,7 @@ app.use(express.json())
 app.use(
   cors()
 );
-connectDb()
+connectToMongoDB()
 
 const port=process.env.PORT||3000
 
