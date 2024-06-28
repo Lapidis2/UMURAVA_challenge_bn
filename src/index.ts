@@ -51,7 +51,7 @@ const port=process.env.PORT||3000
 
 
 
-   app.get('/api',(req:Request,res:Response)=>{
+   app.use('/api',(req:Request,res:Response)=>{
       res.status(200).json({Message:'Welcome to Jean Pierre api site.'})
  })
  app.listen(port,()=>{
