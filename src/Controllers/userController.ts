@@ -32,9 +32,19 @@ export const registerUser = async (req: Request, res: Response) => {
             confirmationToken: crypto.randomBytes(20).toString('hex')
         });
 
-        await newUser.save();
-
-     
+        
+      const token = jwt.sign(
+            {
+                userId: newUser._id,
+                email: newUser.email,
+                role: newUser.role,
+            },
+            process.env.SECRETE_KEY as string, 
+            {
+                expiresIn: '1h', 
+            }
+        );
+     await newUser.save();
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -63,10 +73,20 @@ export const registerUser = async (req: Request, res: Response) => {
                 success: true,
                 message: 'User Created Successfully. Please check your email for confirmation instructions.',
                 user: newUser,
+                token:token
             });
         } else {
             throw new Error('Failed to send confirmation email');
         }
+
+      res.status(201).json({
+            success: true,
+            message: 'User Created Successfully. Please check your email for confirmation instructions.',
+            user: newUser,
+            token: token,
+        });
+
+        
     } catch (error: any) {
         res.status(500).json({ message: error.message || 'Failed to sign up' });
     }
