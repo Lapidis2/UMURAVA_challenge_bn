@@ -35,7 +35,7 @@ const userSchema=new mongoose.Schema({
     token:[{type:String}],
     createdAt:{
         type:Date,
-        default: Date.now
+        default: Date.now()
     },
     
     isConfirmed:{

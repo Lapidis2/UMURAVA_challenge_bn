@@ -5,6 +5,7 @@ import bcrypt from "bcrypt"
 import  jwt from "jsonwebtoken"
 import crypto from "crypto"
 import nodemailer from"nodemailer"
+import { isAdmin } from "../middleWare/verifyToken";
 dotenv.config()
 
 
@@ -44,6 +45,7 @@ export const registerUser = async (req: Request, res: Response) => {
                 expiresIn: '1h', 
             }
         );
+    
      await newUser.save();
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
@@ -127,7 +129,7 @@ export const loginUser= async(req:Request,res:Response)=>{
            return res.status(400).json({message:'Invalid email or password.'})
         }
         else{
-        const isPasswordCorrect=await bcrypt.compareSync(password,user.password)
+        const isPasswordCorrect=await bcrypt.compare(password,user.password)
         if(!isPasswordCorrect){
           return res.status(400).json({message:'invalid credentials'})
         }
@@ -141,8 +143,11 @@ export const loginUser= async(req:Request,res:Response)=>{
                 expiresIn:"1h"
              }
             )
-          
-        return res.status(200).json({message:'login successfull',token,user})
+            
+           console.log(user?.role)
+        return res.status(200).json({message:'login successfull',token})
+        
+        
         }
     } catch (error:any) {
         console.log(error)

@@ -18,9 +18,12 @@ export const createMessage= async (req:Request,res:Response)=>{
         
     } catch (err: any) {
   
-           res.status(500).json({message:"Error while sending a message"})
+           res.status(500).json({message:"Error while sending a message",error:err.message})
     }
-} 
+}   
+
+
+
 
 export const getMessage= async(req:Request,res:Response)=>{
     try {
