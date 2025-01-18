@@ -30,7 +30,7 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        default:'Guest'||'Admin'
+        default:'Guest'
     },
     token:[{type:String}],
     createdAt:{
