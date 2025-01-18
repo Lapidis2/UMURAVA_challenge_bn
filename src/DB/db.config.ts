@@ -11,9 +11,9 @@ function isDefined<T>(arg: T | undefined): arg is T {
 }
 
 async function connectToMongoDB() {
+	const URI = process.env.Local_db;
   try {
-    if (isDefined(process.env.MONGODB_URL)) {
-      const URL= process.env.Local_db
+    if (isDefined(URI)) {
       await mongoose.connect(process.env.Local_db as string, {
         serverSelectionTimeoutMS: 30000,
       });
