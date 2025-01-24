@@ -5,26 +5,28 @@ const app=express()
 dotenv.config()
 
 
-
 function isDefined<T>(arg: T | undefined): arg is T {
   return arg !== undefined;
 }
 
 async function connectToMongoDB() {
-	const URI = process.env.Local_db;
+
+  const URI = process.env.NODE_ENV === 'production' ? process.env.MONGODB_URL : process.env.LOCAL_DB;
 
   try {
     if (isDefined(URI)) {
-      await mongoose.connect(process.env.Local_db as string, {
-        serverSelectionTimeoutMS: 30000,
+      await mongoose.connect(URI, {
+        serverSelectionTimeoutMS: 30000, 
       });
       console.log('MongoDB connected successfully');
     } else {
-      console.error('MONGODB_URL environment variable is not defined.');
+      console.error('MongoDB URI is not defined in environment variables.');
     }
-  } catch (error:any) {
+  } catch (error: any) {
     console.error('Error connecting to MongoDB:', error.message);
+    process.exit(1); 
   }
 }
-connectToMongoDB();
-  export default connectToMongoDB;
+
+
+export default connectToMongoDB;
