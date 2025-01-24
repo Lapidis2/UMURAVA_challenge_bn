@@ -33,11 +33,6 @@ const userSchema=new mongoose.Schema({
         default:'Guest'
     },
     token:[{type:String}],
-    createdAt:{
-        type:Date,
-        default: Date.now()
-    },
-    
     isConfirmed:{
      type: Boolean,
      default:false
@@ -52,7 +47,11 @@ const userSchema=new mongoose.Schema({
     resetPasswordExpire: {
         type:Number
       
-    }
+    },
+	timestamps:{
+		type: Boolean,
+	    default:true
+	}
 })
 const userModal=mongoose.model("user",userSchema)
 export default userModal;

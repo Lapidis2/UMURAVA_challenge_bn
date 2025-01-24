@@ -12,7 +12,7 @@ dotenv.config()
 export const registerUser = async (req: Request, res: Response) => {
     try {
         const { userName, email, password, role } = req.body;
-        const existingUser = await userModal.findOne({ email });
+        const existingUser = await userModal.findOne({ email }).sort({ createdAt: -1 });
 
         if (!userName || !email || !password) {
             return res.status(400).json({ message: 'Please fill out all fields' });
@@ -71,7 +71,7 @@ export const registerUser = async (req: Request, res: Response) => {
         });
 
         if (sendEmailResponse) {
-            res.status(201).json({
+            return res.status(201).json({
                 success: true,
                 message: 'User Created Successfully. Please check your email for confirmation instructions.',
                 user: newUser,
