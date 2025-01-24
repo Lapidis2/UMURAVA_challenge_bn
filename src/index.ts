@@ -17,11 +17,20 @@ dotenv.config()
 const app = express()
 app.use(cors())
 const server = http.createServer(app);
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://jeanpierreportfolio.netlify.app/'], 
-  methods: ['GET', 'POST'],
-  credentials: true 
-}));
+const io = new Server(server,{
+  cors:{
+    origin: ["http://localhost:3000", "https://jeanpierreportfolio.netlify.app/"],
+    methods: ["GET","POST"],
+  
+  }
+})
+
+io.on('connection',(sokect:any)=>{
+  console.log("A user connected")
+
+})
+
+export {io}
 
 
 
