@@ -14,7 +14,7 @@ export const createMessage= async (req:Request,res:Response)=>{
         await newMessage.save()
         await messageNotify(username,email,message)
 
-        res.status(200).json({message:'The message sent successfull',data:newMessage})
+        res.status(201).json({message:'The message sent successfull',data:newMessage})
         
     } catch (err: any) {
   
@@ -138,8 +138,9 @@ export const replyMessage= async(req:Request,res:Response)=>{
   
   export const deleteMessage = async (req: Request, res: Response)=> {
     try {
-      const { userId } = req.params;
-      const message = await messageModal.findByIdAndDelete(userId);
+      const { messageId } = req.params;
+	  
+      const message = await messageModal.findByIdAndDelete(messageId);
   
       if (message) {
         res.status(200).json({

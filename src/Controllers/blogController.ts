@@ -8,7 +8,7 @@ import { v2 as cloudinary } from "cloudinary";
 import subscribeModal from "../Models/subscribeModal";
 import nodemailer from "nodemailer"
 import { DecodedUserPayload } from "../middleWare/verifyToken";
-
+import  Jwt from "jsonwebtoken";
  interface AuthenticatedRequest extends Request {
     user?:DecodedUserPayload; 
 }
@@ -60,7 +60,7 @@ export const createBlog = async (req: Request, res: Response) => {
 
      const blogs= await BlogData.save();
 if(blogs){
-      res.status(200).json({ message: 'Blog created successfully', BlogData });
+      return res.status(201).json({ message: 'Blog created successfully', BlogData });
 
        const selectEmails:any = await subscribeModal.find()
             if(selectEmails.length >0){
@@ -114,19 +114,19 @@ if(blogs){
 
 
 export const getBlogs = async (req: Request, res: Response) => {
-
-
-  try {
-    const blogData = await blogModal.find().sort({_id:-1});
-    if (blogData) {
-      res.status(200).json({message: "success", blog: blogData});
-    } else {
-      res.status(404).json({ message: "No Blog Available" });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  
+	try {
+	  const blogData = await blogModal.find().sort({ _id: -1 });
+  
+	  if (blogData.length > 0) {
+		return res.status(200).json({ message: "Success", blog: blogData });
+	  } else {
+		return res.status(404).json({ message: "No blogs available" });
+	  }
+	} catch (error: any) {
+	  return res.status(500).json({ message: "Internal server error", error: error.message });
+	}
+}
 
 export const getSingleBlog = async ( req: Request,res: Response)=>{
   try {
@@ -164,66 +164,42 @@ export const deleteBlog = async (req: Request, res: Response) => {
 };
 
 export const updateBlog = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
   try {
-   
-    const { id } = req.params;
     const checkBlog = await blogModal.findById(id);
+    if (!checkBlog) {
+      return res.status(404).json({ message: "Blog post not found" });
+	}
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Error uploading file", error: err });
+      }
 
-    if (checkBlog) {
-      
-      
-        upload(req, res, async (err) => {
-          if (err) {
-            return res.status(500).json({ message: "Error uploading file", error: err });
-          }
-
-          try {
-            const { title, headline,content } = req.body;
-            const imageUrl:any = req.file?.path;
-            let updateData:any
-            if(imageUrl){
-
-           
-
-            const result = await cloudinary.uploader.upload(imageUrl, {
-              folder: "uploads",
-            });
-
-             updateData = {
-              title,
-              headline,
-              content,
-              imageUrl: result.secure_url,
-            };
-          }else{
-            updateData = {
-              title,
-              headline,
-              content
-             
-          }
+      const { title, headline, content } = req.body;
+      const imageUrl: any = req.file?.path;
+      let updateData: any = { title, headline, content };
+      if (imageUrl) {
+        try {
+          const result = await cloudinary.uploader.upload(imageUrl, { folder: "uploads" });
+          updateData.imageUrl = result.secure_url; 
+        } catch (cloudinaryError) {
+          return res.status(500).json({ message: "Error uploading image to Cloudinary", error:err.message });
         }
-    
-            const updatedBlog = await blogModal.findByIdAndUpdate(id,  updateData, { new: true });
+      }
 
-            if (updatedBlog) {
-              res.status(200).json({ updatedBlog });
-            } else {
-              res.status(404).json({ message: "Failed to update blog" });
-            }
-          } catch (error:any) {
-            return res.status(500).json({ message: "Internal server error", error: error.message });
-          }
-        });
-      
-    } else {
-      res.status(404).json({ message: "No blog available" });
-    }
+      const updatedBlog = await blogModal.findByIdAndUpdate(id, updateData, { new: true });
+      if (updatedBlog) {
+        return res.status(200).json({ message: "Blog updated successfully", updatedBlog });
+      } else {
+        return res.status(404).json({ message: "Blog post not found for updating" });
+      }
+    });
   } catch (error: any) {
-
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
 
 
 export const addLike = async(req:AuthenticatedRequest,res:Response)=>{

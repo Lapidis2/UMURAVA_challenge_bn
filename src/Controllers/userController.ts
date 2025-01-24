@@ -158,7 +158,7 @@ export const loginUser= async(req:Request,res:Response)=>{
     try {
         const users= await userModal.find().select("-Password").sort({createdAt: -1})
         if(!users){
-            res.status(400).json({message:"No registered user found"})
+            res.status(404).json({message:"No registered user found"})
         }
         res.status(200).json({message:"All registered users",users})
     } catch (error) {
@@ -169,9 +169,12 @@ export const loginUser= async(req:Request,res:Response)=>{
 export const getSingleUser= async(req:Request,res:Response)=>{
     try {
         const userId=req.params.userId;
+		if (!userId || userId.length !== 24) {
+			return res.status(400).json({ message: "Invalid user ID format." });
+		  }
         const oneUser= await userModal.findById(userId)
         if(!oneUser){
-            res.status(400).json({message:"user not found"})
+            res.status(404).json({message:"user not found"})
         }
         res.status(200).json({oneUser})
     } catch (error) {
@@ -182,34 +185,27 @@ export const getSingleUser= async(req:Request,res:Response)=>{
 
 
 export const updateUser= async(req:Request,res:Response)=>{
+	try{
     const userId=req.params.userId;
     const {userName,email,role}=req.body
-    const user=await userModal.findById(userId)
-    try{
-    if(user){
-        
-    if(userName){
-            user.userName=userName
-    }
-    if(email){
-           user.email=email
-    }
-    if(role){
-        user.role=role
-    }
-    }
-     await user?.save()
-     res.status(200).json({message:'User updated successfully',user})
-    }
-     
+	if (!userName && !email) {
+		return res.status(400).json({ message: "Invalid input or missing required fields." });
+	  }
+    const user=await userModal.findByIdAndUpdate(userId,{userName,email,role},{new:true})
+	if (!user) {
+		return res.status(404).json({ message: "User not found." });
+	  }
+	  return res.status(200).json({message: "User updated successfully.",user });
+	}
+    
     catch(error){
         res.status(500).json({message:"error updating  user"})
 
     }
 
-
-    
 }
+    
+
 export const deleteUser= async(req:Request,res:Response)=>{
     const userId=req.params.userId;
     const user=await userModal.findById(userId)

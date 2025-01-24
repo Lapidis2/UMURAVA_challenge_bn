@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport({
         }
         const existSub=await subscribeModal.findOne({email})
         if(existSub){
-            res.status(409).json({message:"The email already has subscribed before"})
+           return  res.status(409).json({message:"The email already has subscribed before"})
         }
 
         const newSubscriber = await subscribeModal.create({ email});
@@ -58,9 +58,28 @@ const transporter = nodemailer.createTransport({
         `
         });
    
-     res.status(201).json({message:'The subscription added successfully',newSubscriber});
+     return res.status(201).json({message:'The subscription added successfully',newSubscriber});
     } catch(err){
         console.log(err);
         res.status(500).json( {message: "Failed to send email"})
     }
+  }
+
+  export const deleteSub= async(req:Request,res:Response)=>{
+	try {
+		const {email}=req.body
+		if(!email){
+		return res.status(400).json({message:"email is required"})
+		}
+	const existSub= await subscribeModal.findOneAndDelete({email})
+	if(existSub){
+	return res.status(200).json({message:"Your subscribtion has been removed.Feel free to subscribe again anytime!"})
+	}
+	else{
+		return res.status(404).json({message:"Email not found.please check the email again"})
+	}
+	} catch (error) {
+		res.status(500).json( {message: "Failed to remove email"})
+
+	}
   }

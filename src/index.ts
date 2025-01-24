@@ -1,6 +1,8 @@
 import express from "express"
 import multer from "multer"
-import connectToMongoDB from "./DB/db.config"
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from "./Config/Swagger";
+import connectToMongoDB from "./Config/db.config"
 import userRoutes from "./Routers/userRoutes"
 import { Request,Response } from "express"
 import messageRoutes from "./Routers/messageRoute"
@@ -42,7 +44,7 @@ app.use(
 connectToMongoDB()
 
 const port=process.env.PORT||3000
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.use('/api',subscribeRoute)
   app.use('/api',messageRoutes)
   app.use('/api',userRoutes)

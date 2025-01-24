@@ -29,10 +29,10 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
       
       next();
     } else {
-      return res.status(403).json({ message: "Access denied. Invalid token." });
+      return res.status(404).json({ message: "Access denied. Invalid token." });
     }
   } catch (error) {
-    return res.status(403).json({ message: "Error during token verification!" });
+    return res.status(500).json({ message: "Error during token verification!" })
   }
 };
 
