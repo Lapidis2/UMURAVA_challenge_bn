@@ -14,10 +14,14 @@ This repository contains the backend application of a portfoluio developped by J
     - [Deployed\_link:](#deployed_link)
   - [Licensing](#licensing)
 ### 1. Project Overview
-
-In our project we developed an ecommerce application which is a platform where buyers and sellers meet to interact. Each Seller will be able to register, post their products, and fully manage their stock. Buyers will be able to see all the products on the platform, add and remove products to their shopping carts, and buy from any seller where they will be able to pay via the platform.
+That is a personal portfolio website designed to showcase your work, blog posts, and challenges. The site features a user-friendly interface where visitors can explore your blog articles, challenges, and achievements. Additionally, the site includes a notification feature that updates subscribers when a new blog or challenge is posted, allowing for engagement and growth of your audience.
 
 ### 2. Technology used 
+* Frontend: HTML, CSS, Typescript(React)
+
+Authentication: JWT for secure access control
+Email Notifications: Nodemailer for sending email notifications
+Hosting: Deployed on Netlify for the frontend and render for the backend.
 
 * Node.js: ![Node.js](https://img.shields.io/badge/-Node.js-000000?style=flat&logo=node.js)
   
