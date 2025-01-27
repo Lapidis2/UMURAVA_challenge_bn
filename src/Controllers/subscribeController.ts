@@ -65,6 +65,73 @@ const transporter = nodemailer.createTransport({
     }
   }
 
+
+
+
+  export const NotifySubscribers = async (req: Request, res: Response) => {
+	try {
+	  const { title, headline, content } = req.body;
+  
+	 
+	  if (!title || !headline || !content) {
+		return res.status(400).json({ status: "error", message: "Title, headline, and link are required" });
+	  }
+  
+	
+	  const subscribers = await subscribeModal.find();
+	  if (!subscribers.length) {
+		return res.status(404).json({ status: "error", message: "No subscribers found" });
+	  }
+  
+	  
+	  const transporter = nodemailer.createTransport({
+		host: "smtp.gmail.com",
+		port: 587,
+		secure: false, 
+		auth: {
+		  user: process.env.ADMIN_EMAIL,
+		  pass: process.env.ADMIN_PSWD, 
+		},
+		tls: {
+			rejectUnauthorized: false,
+		}
+	  });
+  
+	  const sendEmails = subscribers.map(async (subscriber:any) => {
+		return transporter.sendMail({
+		  from: process.env.ADMIN_EMAIL,
+		  to: subscriber.email,
+		  replyTo: process.env.ADMIN_EMAIL,
+		  subject: `New Challenge: ${title}`,
+		  html: `
+			<div style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
+				<div style="text-align: center;">
+					<h1 style="color: #FDA640;">New Challenge Notification!</h1>
+					
+					<h2 style="color: #221F2F;">${title}</h2>
+				</div>
+				<div style="margin-top: 20px; text-align: left;">
+					<p style="font-size: 16px; line-height: 1.5;">${headline}</p>
+					<p style="font-size: 16px; margin-top: 20px;">
+						<a href="${content}" target="_blank" style="color: #FDA640; text-decoration: none;">View Challenge</a>
+					</p>
+				</div>
+				<div style="text-align: center; margin-top: 20px;">
+					<p style="color: #ffffff; background-color: #221F2F; padding: 10px; font-size: 14px;">&copy; Copyright 2024 All rights reserved</p>
+				</div>
+			</div>
+		  `,
+		});
+	  });
+  
+	  await Promise.all(sendEmails);
+  
+	  return res.status(200).json({ status: "success", message: "Notifications sent to all subscribers" });
+	} catch (err) {
+	  console.error("Error sending notifications:", err);
+	  res.status(500).json({ status: "error", message: "Failed to send notifications" });
+	}
+  };
   export const deleteSub= async(req:Request,res:Response)=>{
 	try {
 		const {email}=req.body

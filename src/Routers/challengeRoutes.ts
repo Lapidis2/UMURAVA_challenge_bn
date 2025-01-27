@@ -1,6 +1,6 @@
 import  express  from "express";
 import { isAuthenticated,isAdmin } from "../middleWare/verifyToken";
-import { createBlog,getBlogs,getSingleBlog,updateBlog,deleteBlog, addLike,addComment } from "../Controllers/blogController";
+import { createBlog,getBlogs,getSingleBlog,updateBlog,deleteBlog, addLike,addComment } from "../Controllers/challengeController";
 
 const route =express.Router()
 

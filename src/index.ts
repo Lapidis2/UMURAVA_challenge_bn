@@ -7,7 +7,7 @@ import userRoutes from "./Routers/userRoutes"
 import { Request,Response } from "express"
 import messageRoutes from "./Routers/messageRoute"
 import subscribeRoute from "./Routers/subscribeRoute"
-import blogRoutes from "./Routers/blogRoutes"
+import blogRoutes from "./Routers/challengeRoutes"
 import bodyParser = require("body-parser")
 import{Server}from "socket.io"
 import cors from "cors"

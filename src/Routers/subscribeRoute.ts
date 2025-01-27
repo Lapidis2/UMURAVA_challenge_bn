@@ -1,5 +1,5 @@
 import express from "express";
-import { Subscribe,deleteSub } from "../Controllers/subscribeController";
+import { Subscribe,deleteSub,NotifySubscribers} from "../Controllers/subscribeController";
 import { isAuthenticated } from "../middleWare/verifyToken";
 
 const route = express.Router();
@@ -63,7 +63,7 @@ const route = express.Router();
  *                   type: string
  *                   example: "Server error, failed to subscribe."
  */
-
+route.post("/subscribe",Subscribe);
 /**
  * @swagger
  * /api/unsubscribe:
@@ -122,6 +122,7 @@ const route = express.Router();
  *                   type: string
  *                   example: "Server error, failed to remove email."
  */
-
+route.delete("/unsubscribe",deleteSub);
+route.post("/notfySub",NotifySubscribers);
 const subscribeRoute = (module.exports) = route;
 export default subscribeRoute;
