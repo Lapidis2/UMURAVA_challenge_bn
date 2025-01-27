@@ -1,7 +1,6 @@
 # Portfolio_backend
- 
-# e-commerce-crafters-bn :muscle:
-This repository contains the backend application of an e-commerce website developed by Andela Team Crafters
+
+This repository contains the backend application of a portfoluio developped by Jean Pierre
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
 
 - Table of content
@@ -24,9 +23,8 @@ In our project we developed an ecommerce application which is a platform where b
   
 * Express: ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB&style=for-the-badge)
   
-* Postgres Database: [![PostgreSQL](https://img.shields.io/badge/database-PostgreSQL-blue)](https://www.postgresql.org/)
-  
-* Sequelize ORM: [![Sequelize](https://img.shields.io/badge/ORM-Sequelize-orange)](https://sequelize.org/)
+* MongoDB Database: [![MongoDB](https://img.shields.io/badge/database-MongoDB-green)](https://www.mongodb.com/)
+
   
 * Testing by Jest:[![Jest](https://img.shields.io/badge/testing-Jest-red)](https://jestjs.io/)
 
@@ -39,7 +37,7 @@ In our project we developed an ecommerce application which is a platform where b
 
 - Node.js
 - Packages
-- Postgres database
+- Mongodb database
 - Git
 
 ### *Installation
@@ -49,11 +47,8 @@ In our project we developed an ecommerce application which is a platform where b
 3. Copy the environment configuration:
     `cp .env.example .env`
      you can update the values of .env file with yours.
-3. To run migrations into Postgres use the following command:
-   `npx sequelize-cli db:migrate`
-    `sequelize-cli`: This refers to the Sequelize Command Line Interface (CLI), which provides commands for interacting with Sequelize, including creating migrations, models, seeders, and running migrations.
-4. To run seeders into Postgres use the following command:
-   `npx sequelize-cli db:seed:all`
+4. To run mongodb use the following command:
+   `npm run dev`
 5. Run the project using this command `npm start`
 6. running test by `npm test`
 
@@ -75,7 +70,7 @@ To contribute to this project:
 ###  5.Documentation 
 ![Swagger Badge](https://img.shields.io/badge/Swagger-85EA2D?logo=swagger&logoColor=000&style=for-the-badge)
 The following are steps to create your api documentation:
-- Navigate to the location `src/docs`.
+- Navigate to the location `src/api-docs`.
 Create a `.yaml` file.
 - Write your documentation in the file.
  No need to set up Swagger-related things in `server.ts` again. <br>:warning:
