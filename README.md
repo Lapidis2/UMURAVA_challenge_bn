@@ -42,7 +42,7 @@ In our project we developed an ecommerce application which is a platform where b
 
 ### *Installation
 
-1. Clone the repository from github https://github.com/atlp-rwanda/e-commerce-crafters-bn.git
+1. Clone the repository from github https://github.com/Lapidis2/Portfolio_backend
 2. Run `npm install` to install all package dependencies
 3. Copy the environment configuration:
     `cp .env.example .env`
