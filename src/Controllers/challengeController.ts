@@ -62,7 +62,7 @@ export const createBlog = async (req: Request, res: Response) => {
 		const blogs: any = await BlogData.save();
   
 		if (blogs) {
-		  // Send notifications after successfully creating the blog
+		 
 		  const selectEmails: any = await subscribeModal.find();
 		  if (selectEmails.length > 0) {
 			const transporter = nodemailer.createTransport({
@@ -103,7 +103,7 @@ export const createBlog = async (req: Request, res: Response) => {
 				});
 			  });
   
-			  // Wait for all emails to be sent before responding
+			 
 			  await Promise.all(emails);
   
 			  return res.status(201).json({ status: 'success', message: 'Notifications sent to all subscribers' ,blogs});
