@@ -1,6 +1,6 @@
 # Challenge_backend
 
-This repository contains the backend application of a portfoluio developped by Jean Pierre
+This repository contains the backend application of a Umurava challenge developped by Jean Pierre
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
 
 - Table of content
@@ -14,7 +14,7 @@ This repository contains the backend application of a portfoluio developped by J
     - [Deployed\_link:](#deployed_link)
   - [Licensing](#licensing)
 ### 1. Project Overview
-That is a personal portfolio website designed to showcase your work, blog posts, and challenges. The site features a user-friendly interface where visitors can explore your blog articles, challenges, and achievements. Additionally, the site includes a notification feature that updates subscribers when a new blog or challenge is posted, allowing for engagement and growth of your audience.
+Umurava challenge project
 
 ### 2. Technology used 
 * Frontend: HTML, CSS, Typescript(React)
