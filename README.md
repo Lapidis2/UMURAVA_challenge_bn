@@ -46,7 +46,7 @@ Hosting: Deployed on Netlify for the frontend and render for the backend.
 
 ### *Installation
 
-1. Clone the repository from github https://github.com/Lapidis2/Portfolio_backend
+1. Clone the repository from github https://github.com/Lapidis2/challenge_bn
 2. Run `npm install` to install all package dependencies
 3. Copy the environment configuration:
     `cp .env.example .env`
