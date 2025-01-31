@@ -1,4 +1,4 @@
-# Portfolio_backend
+# Challenge_backend
 
 This repository contains the backend application of a portfoluio developped by Jean Pierre
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
