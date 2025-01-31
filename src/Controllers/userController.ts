@@ -151,7 +151,7 @@ export const loginUser= async(req:Request,res:Response)=>{
         }
     } catch (error:any) {
         console.log(error)
-        return res.status(500).json({message:'Failed to sign in',error})
+        return res.status(500).json({message:'Failed to sign in',error:error.message})
     }
 }
  export const getAllUser= async(req:Request,res:Response)=>{
