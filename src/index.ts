@@ -19,9 +19,7 @@ app.use(cors())
 const server = http.createServer(app);
 const io = new Server(server,{
   cors:{
-    origin: ["http://localhost:3000", "https://jeanpierreportfolio.netlify.app/"],
-    methods: ["GET","POST"],
-  
+    origin: ["http://localhost:5173", "https://jeanpierreportfolio.netlify.app/"],
   }
 })
 
@@ -57,5 +55,5 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
       res.status(200).json({Message:'Welcome to Jean Pierre api site.'})
  })
  app.listen(port,()=>{
-    console.log(`Server is running on ${port}`)
+    console.log(`Server is running on http://localhost:${port}`)
  })
