@@ -117,7 +117,6 @@ export const confirmEmail = async (req: Request, res: Response) => {
     }
 };
 
-
 export const loginUser= async(req:Request,res:Response)=>{
     try {
         const {email,password}=req.body;
@@ -145,7 +144,7 @@ export const loginUser= async(req:Request,res:Response)=>{
             )
             
            console.log(user?.role)
-        return res.status(200).json({message:'login successfull',token})
+        return res.status(200).json({message:'login successfull',token,user})
         
         
         }
@@ -314,7 +313,7 @@ export const logout = async (req: Request, res: Response) => {
     user.token = user.token.filter((t:String) => t !== token);
     await user.save();
 
-    return res.status(200).json({ message: 'Logout successful' });
+    return res.status(200).json({ message: 'Logout successful',user });
 
   } catch (error) {
     console.error('Error during logout:', error);
