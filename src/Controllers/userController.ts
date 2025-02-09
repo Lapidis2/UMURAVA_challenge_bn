@@ -150,7 +150,7 @@ export const loginUser= async(req:Request,res:Response)=>{
             user: {
             id: user._id,
             email: user.email,
-            role: user.role, // Ensure role is sent
+            role: user.role, 
           }})
         
         
