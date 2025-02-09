@@ -3,19 +3,24 @@ import mongoose from "mongoose";
 
 interface blogModal{
     title:String,
-    headline:String,
-    content:String,
-    createdAt: Date 
+    skills:String,
+    seniority:String,
+    status: String,
+    timeline:String
 }
 
-const blogSchema= new mongoose.Schema<blogModal>({
-         title:{type:String},
-         headline:{type:String},
-         content:{type:String},
-         createdAt:{type:Date,default: Date.now()},
-         
-    },
-    { timestamps: true 
-    })
+const blogSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    skills: { type: [String], required: true },
+    seniority: { type: String, required: true },
+    timeline: { type: String, required: true },
+    status: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const blogModal=mongoose.model("blogs",blogSchema)
 export default blogModal
