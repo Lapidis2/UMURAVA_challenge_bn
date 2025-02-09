@@ -136,6 +136,7 @@ export const loginUser= async(req:Request,res:Response)=>{
         const token=jwt.sign(
             {userId:user._id,
               email:user.email,
+	      userName:user.userName,
               role:user.role
             },
                 process.env.SECRETE_KEY as string,
@@ -144,13 +145,7 @@ export const loginUser= async(req:Request,res:Response)=>{
              }
             )
             
-          let pageUrl;
-    if (user.role === 'admin') {
-      pageUrl = '/admin';
-    }
-    else   {
-      pageUrl = '/talent-community';
-    }
+ 
         return res.status(200).json({message:'login successfull',token,pageUrl,
 				     user: {
             id: user._id,
