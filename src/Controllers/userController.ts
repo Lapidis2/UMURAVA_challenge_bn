@@ -64,7 +64,7 @@ export const registerUser = async (req: Request, res: Response) => {
             html: `
                 <div>
                     <p>Dear ${userName},</p>
-                    <p>Thank you for registering with us.</p>
+                    <p>Thank you for your registeration.</p>
                     <p>Please click <a href="${confirmationLink}">here</a> to confirm your email address.</p>
                 </div>
             `,
