@@ -17,19 +17,19 @@ export const createBlog = async (req: Request, res: Response) => {
 	
   
 	  try {
-		const { title, headline, content } = req.body;
-		const author = req.body.author || "admin";
+		const { title, skills, timeline,seniority,status } = req.body
   
-		if (!title || !headline || !content ) {
-		  return res.status(400).json({ message: "Title, headline, content,are required" });
+		if (!title || !skills || !timeline || !seniority || !status ) {
+		  return res.status(400).json({ message: "please fill all fields" });
 		}
 
   
 		const BlogData = new blogModal({
 		  title,
-		  headline,
-		  content,
-		  createdAt: Date.now(),
+		  skills,
+		  seniority,
+		  timeline,
+	          status
 		 
 		});
   
