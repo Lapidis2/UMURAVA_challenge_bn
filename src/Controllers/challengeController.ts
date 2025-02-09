@@ -93,7 +93,7 @@ export const createBlog = async (req: Request, res: Response) => {
 						<p style="color: #666;">Hello there!</p>
 						<p style="color: #666;">We're excited to inform you that a new challenge post has been added to our website.</p>
 						<p style="color: #666;">Check it out now:</p>
-						<a href="https://jeanpierreportfolio.netlify.app/openedblog?id=${blogs._id}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Read challenge here</a>
+						<a href="https://umurava-challenge.netlify.app/openedblog?id=${blogs._id}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Read challenge here</a>
 						<p style="color: #666;">If you have any questions or feedback, feel free to reply to this email.</p>
 						<p style="color: #666;">Thank you for being a valued subscriber!</p>
 						<p style="color: #666;">Best Regards,<br>Umurava Tech</p>
