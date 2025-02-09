@@ -64,7 +64,7 @@ export const registerUser = async (req: Request, res: Response) => {
             html: `
                 <div>
                     <p>Dear ${userName},</p>
-                    <p>Thank you for registering with us.</p>
+                    <p>Thank you for your registeration.</p>
                     <p>Please click <a href="${confirmationLink}">here</a> to confirm your email address.</p>
                 </div>
             `,
@@ -144,7 +144,14 @@ export const loginUser= async(req:Request,res:Response)=>{
             )
             
            console.log(user?.role)
-        return res.status(200).json({message:'login successfull',token,user})
+        return res.status(200).json({
+            message:'login successfull',
+            token, 
+            user: {
+            id: user._id,
+            email: user.email,
+            role: user.role, 
+          }})
         
         
         }

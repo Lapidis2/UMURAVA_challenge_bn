@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-
-
 interface blogModal{
     title:String,
     headline:String,
@@ -16,7 +14,6 @@ interface blogModal{
     }],
     createdAt: Date 
 }
-
 const blogSchema= new mongoose.Schema<blogModal>({
          title:{type:String},
          headline:{type:String},
@@ -24,7 +21,6 @@ const blogSchema= new mongoose.Schema<blogModal>({
          imageUrl:{type:String},
          createdAt:{type:Date,default: Date.now()},
          likes:[{type:mongoose.Types.ObjectId,ref:"User"}],
-    
         comment: [
             {
                   author:String,
@@ -33,8 +29,6 @@ const blogSchema= new mongoose.Schema<blogModal>({
                          
                      },
                 created: { type: Date, default: Date.now },
-                
-              
             },
         ],
     },
