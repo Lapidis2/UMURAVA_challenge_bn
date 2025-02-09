@@ -28,7 +28,7 @@ export const registerUser = async (req: Request, res: Response) => {
             userName,
             email,
             password: passwordHash,
-            role: role || 'Guest',
+            role: role || 'talent',
             isConfirmed: false, 
             confirmationToken: crypto.randomBytes(20).toString('hex')
         });
