@@ -144,7 +144,13 @@ export const loginUser= async(req:Request,res:Response)=>{
              }
             )
             
-           console.log(user?.role)
+          let pageUrl;
+    if (user.role === 'admin') {
+      pageUrl = '/admin';
+    }
+    else   {
+      pageUrl = '/talent-community';
+    }
         return res.status(200).json({message:'login successfull',token,
 				     user: {
             id: user._id,
