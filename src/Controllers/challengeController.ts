@@ -262,5 +262,3 @@ export const addComment = async (req: Request, res: Response, next: NextFunction
     res.status(500).json({message:'internal server error',error})
   }
 };
-
-

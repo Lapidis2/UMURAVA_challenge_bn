@@ -28,7 +28,7 @@ export const registerUser = async (req: Request, res: Response) => {
             userName,
             email,
             password: passwordHash,
-            role: role || 'Guest',
+            role: role || 'talent',
             isConfirmed: false, 
             confirmationToken: crypto.randomBytes(20).toString('hex')
         });
@@ -136,6 +136,7 @@ export const loginUser= async(req:Request,res:Response)=>{
         const token=jwt.sign(
             {userId:user._id,
               email:user.email,
+	      userName:user.userName,
               role:user.role
             },
                 process.env.SECRETE_KEY as string,
@@ -144,14 +145,20 @@ export const loginUser= async(req:Request,res:Response)=>{
              }
             )
             
-           console.log(user?.role)
-        return res.status(200).json({message:'login successfull',token})
+ 
+        return res.status(200).json({message:'login successfull',token,
+				     user: {
+            id: user._id,
+	    userName:user.userName,
+            email: user.email,
+            role: user.role, 
+          }})
         
         
         }
     } catch (error:any) {
         console.log(error)
-        return res.status(500).json({message:'Failed to sign in',error})
+        return res.status(500).json({message:'Failed to sign in',error:error.message})
     }
 }
  export const getAllUser= async(req:Request,res:Response)=>{
