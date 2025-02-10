@@ -11,7 +11,7 @@ import { DecodedUserPayload } from "../middleWare/verifyToken";
  interface AuthenticatedRequest extends Request {
     user?:DecodedUserPayload; 
 }
-dotenv.config()
+dotenv.config();
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,

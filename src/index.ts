@@ -30,7 +30,7 @@ io.on('connection',(sokect:any)=>{
 
 })
 
-export {io}
+export {io};
 
 
 

@@ -12,7 +12,7 @@ function isDefined<T>(arg: T | undefined): arg is T {
 async function connectToMongoDB() {
 
   const URI = process.env.NODE_ENV === 'production' ? process.env.MONGODB_URL : process.env.LOCAL_DB;
-
+ console.log(URI)
   try {
     if (isDefined(URI)) {
       await mongoose.connect(URI, {
