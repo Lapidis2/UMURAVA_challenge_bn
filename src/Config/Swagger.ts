@@ -9,7 +9,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000', 
+      url: 'https://umurava-challenge-bn.onrender.com', 
       description: 'Development Server',
     },
   ],
