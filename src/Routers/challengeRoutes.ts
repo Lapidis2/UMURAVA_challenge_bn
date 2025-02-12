@@ -1,6 +1,6 @@
 import  express  from "express";
 import { isAuthenticated,isAdmin } from "../middleWare/verifyToken";
-import { createBlog,getBlogs,getSingleBlog,updateBlog,deleteBlog, addLike,addComment } from "../Controllers/challengeController";
+import { createBlog,getBlogs,getSingleBlog,updateBlog,deleteBlog } from "../Controllers/challengeController";
 
 const route =express.Router()
 
@@ -348,7 +348,5 @@ route.put('/updateBlog/:id',updateBlog)
  */
 
 route.delete('/deleteBlog/:id',deleteBlog)
-route.post('/addLike/:blogId',isAuthenticated,addLike)
-route.post('/addComment/:blogId',isAuthenticated,addComment)
 const blogRoutes=module.exports=route
 export default blogRoutes

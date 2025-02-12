@@ -1,38 +1,23 @@
 import mongoose from "mongoose";
 interface blogModal{
     title:String,
-    headline:String,
-    content:String,
-    imageUrl:String,
-    views:[],
-    likes:[],
-    shares:[],
-    comment:[{
-        author:mongoose.Types.ObjectId,
-        content:String,
-         date  :Date
-    }],
-    createdAt: Date 
+    deadline:String,
+    duration:String,
+    prize:String,
+    contactEmail:String,
+    projectDescription:String,
+    projectBrief:String,
+    projectTasks:String
 }
 const blogSchema= new mongoose.Schema<blogModal>({
-         title:{type:String},
-         headline:{type:String},
-         content:{type:String},
-         imageUrl:{type:String},
-         createdAt:{type:Date,default: Date.now()},
-         likes:[{type:mongoose.Types.ObjectId,ref:"User"}],
-        comment: [
-            {
-                  author:String,
-                
-                content: {type:String
-                         
-                     },
-                created: { type: Date, default: Date.now },
-            },
-        ],
-    },
-    { timestamps: true 
+	title: { type: String, required: true },
+	deadline: { type: Date, required: true },
+	duration: { type: String, required: true },
+	prize: { type: String, required: true },
+	contactEmail: { type: String, required: true },
+	projectDescription: { type: String, required: true, maxlength: 250 },
+	projectBrief: { type: String, required: true, maxlength: 50 },
+	projectTasks: { type: String, required: true, maxlength: 500 },
     })
 const blogModal=mongoose.model("blogs",blogSchema)
 export default blogModal
