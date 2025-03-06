@@ -37,6 +37,8 @@ const userSchema=new mongoose.Schema({
      type: Boolean,
      default:false
     },
+	confirmationExpires: { type: Date },
+	
     confirmationToken:{
         type:String
     } ,

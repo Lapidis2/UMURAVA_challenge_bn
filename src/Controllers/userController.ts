@@ -23,6 +23,8 @@ export const registerUser = async (req: Request, res: Response) => {
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
+		const rawToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
 
         const newUser = new userModal({
             userName,
@@ -30,7 +32,8 @@ export const registerUser = async (req: Request, res: Response) => {
             password: passwordHash,
             role: role || 'talent',
             isConfirmed: false, 
-            confirmationToken: crypto.randomBytes(20).toString('hex')
+            confirmationToken:hashedToken,
+			confirmationExpires: Date.now() + 24 * 60 * 60 * 1000
         });
 
         
@@ -55,7 +58,7 @@ export const registerUser = async (req: Request, res: Response) => {
             },
         });
 
-        const confirmationLink = `http://${req.headers.host}/confirm/${newUser.confirmationToken}`;
+        const confirmationLink = `http://${req.headers.host}/confirm/${rawToken}`;
 
         const sendEmailResponse = await transporter.sendMail({
             from: process.env.ADMIN_EMAIL,
@@ -98,9 +101,11 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const confirmEmail = async (req: Request, res: Response) => {
     const { token } = req.params;
-
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     try {
-        const user = await userModal.findOne({ confirmationToken: token });
+        const user = await userModal.findOne({ 
+			 confirmationToken: hashedToken,
+            confirmationExpires: { $gt: Date.now() },});
 
         if (!user) {
             return res.status(404).json({ message: 'Invalid or expired token' });
@@ -108,10 +113,11 @@ export const confirmEmail = async (req: Request, res: Response) => {
 
         
         user.isConfirmed = true;
-        user.confirmationToken = undefined;
+		user.confirmationToken = undefined;
+        user.confirmationExpires = undefined;
         await user.save();
-
         res.status(200).json({ message: 'Email confirmed successfully' });
+		return res.redirect('https://umurava-skill-challenge.netlify.app/join');
     } catch (error) {
         res.status(500).json({ message: 'Failed to confirm email' });
     }

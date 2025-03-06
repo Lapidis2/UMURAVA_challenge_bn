@@ -78,7 +78,9 @@ const route=express.Router()
 
 
 route.post('/registerUser',registerUser)
+route.get('/confirm/:token', confirmEmail);
 route.put('/confirmEmail/:token',confirmEmail)
+
 /**
  * @swagger
  * /api/login:
