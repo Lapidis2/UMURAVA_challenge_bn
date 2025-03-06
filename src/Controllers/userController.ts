@@ -117,7 +117,7 @@ export const confirmEmail = async (req: Request, res: Response) => {
         user.confirmationExpires = undefined;
         await user.save();
         res.status(200).json({ message: 'Email confirmed successfully' });
-		return res.redirect('https://umurava-skill-challenge.netlify.app/join');
+		
     } catch (error) {
         res.status(500).json({ message: 'Failed to confirm email' });
     }
