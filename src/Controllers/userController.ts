@@ -58,7 +58,7 @@ export const registerUser = async (req: Request, res: Response) => {
             },
         });
 
-        const confirmationLink = `https://umurava-skill-challenge.netlify.app/email-verification`;
+        const confirmationLink = `http://${req.headers.host}/api/confirm/${rawToken}`;
 
         const sendEmailResponse = await transporter.sendMail({
             from: process.env.ADMIN_EMAIL,
