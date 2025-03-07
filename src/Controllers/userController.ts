@@ -23,30 +23,33 @@ export const registerUser = async (req: Request, res: Response) => {
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
+		const rawToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
 
         const newUser = new userModal({
             userName,
             email,
             password: passwordHash,
             role: role || 'talent',
-            isConfirmed: false
-           
+            isConfirmed: false, 
+            confirmationToken:hashedToken,
+			confirmationExpires: Date.now() + 24 * 60 * 60 * 1000
         });
 
-        const token = jwt.sign(
+        
+      const token = jwt.sign(
             {
                 userId: newUser._id,
                 email: newUser.email,
                 role: newUser.role,
             },
-            process.env.SECRETE_KEY as string,
+            process.env.SECRETE_KEY as string, 
             {
                 expiresIn: '1h', 
             }
         );
-
-        await newUser.save();
-
+    
+     await newUser.save();
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -55,10 +58,9 @@ export const registerUser = async (req: Request, res: Response) => {
             },
         });
 
-        
-        const confirmationLink = `https://umurava-challenge-bn.onrender.com/api/confirm/${token}`;
+        const confirmationLink = `https://umurava-skill-challenge.netlify.app/confirm/${rawToken}
+		`;
 
-        
         const sendEmailResponse = await transporter.sendMail({
             from: process.env.ADMIN_EMAIL,
             to: email,
@@ -72,61 +74,50 @@ export const registerUser = async (req: Request, res: Response) => {
             `,
         });
 
-    
-        if (!sendEmailResponse) {
+        if (sendEmailResponse) {
+            return res.status(201).json({
+                success: true,
+                message: 'User Created Successfully. Please check your email for confirmation instructions.',
+                user: newUser,
+                token:token
+            });
+        } else {
             throw new Error('Failed to send confirmation email');
         }
 
-        return res.status(201).json({
-            success: true,
-            message: 'User created successfully. Please check your email for confirmation instructions.',
-            user: newUser,
-            token: token,
-        });
-
+        
     } catch (error: any) {
-        console.error('Error during user registration:', error);
         res.status(500).json({ message: error.message || 'Failed to sign up' });
     }
 };
 
 
 
-
 export const confirmEmail = async (req: Request, res: Response) => {
     const { token } = req.params;
-    if (!token) {
-        return res.status(400).json({ message: 'Invalid token' });
-    }
-
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     try {
-        const decoded: any = jwt.verify(token, process.env.SECRETE_KEY as string);      
-        const user = await userModal.findOne({
-            _id: decoded.userId, 
-            confirmationToken: decoded.token, 
-            confirmationExpires: { $gt: Date.now() }, 
-        });
+        const user = await userModal.findOne({ 
+			 confirmationToken: hashedToken,
+            confirmationExpires: { $gt: Date.now() },});
 
         if (!user) {
             return res.status(404).json({ message: 'Invalid or expired token' });
         }
-        if (user.isConfirmed) {
-            return res.status(400).json({ message: 'Email is already confirmed' });
-        }
+
+        
         user.isConfirmed = true;
-        user.confirmationToken = undefined;
+		user.confirmationToken = undefined;
         user.confirmationExpires = undefined;
-
         await user.save();
-
-     
-        res.redirect('https://umurava-skill-challenge.netlify.app/');
-
+        res.status (200).json({ message: 'Email confirmed successfully' });
+		
     } catch (error) {
-        console.error('Error during email confirmation:', error);
         res.status(500).json({ message: 'Failed to confirm email' });
     }
 };
+
+
 export const loginUser= async(req:Request,res:Response)=>{
     try {
         const {email,password}=req.body;
