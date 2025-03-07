@@ -116,7 +116,7 @@ export const confirmEmail = async (req: Request, res: Response) => {
 		user.confirmationToken = undefined;
         user.confirmationExpires = undefined;
         await user.save();
-        res.status(200).json({ message: 'Email confirmed successfully' });
+        res.redirect('/');
 		
     } catch (error) {
         res.status(500).json({ message: 'Failed to confirm email' });
