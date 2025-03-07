@@ -58,7 +58,8 @@ export const registerUser = async (req: Request, res: Response) => {
             },
         });
 
-        const confirmationLink = `http://${req.headers.host}/api/confirm/${rawToken}`;
+        const confirmationLink = `https://umurava-skill-challenge.netlify.app/email-verification/${rawToken}
+		`;
 
         const sendEmailResponse = await transporter.sendMail({
             from: process.env.ADMIN_EMAIL,
@@ -116,7 +117,7 @@ export const confirmEmail = async (req: Request, res: Response) => {
 		user.confirmationToken = undefined;
         user.confirmationExpires = undefined;
         await user.save();
-        res.redirect('/');
+        res.status (200).json({ message: 'Email confirmed successfully' });
 		
     } catch (error) {
         res.status(500).json({ message: 'Failed to confirm email' });
