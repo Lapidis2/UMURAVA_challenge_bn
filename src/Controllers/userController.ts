@@ -58,7 +58,7 @@ export const registerUser = async (req: Request, res: Response) => {
             },
         });
 
-        const confirmationLink = `https://umurava-skill-challenge.netlify.app/email-verification/${rawToken}
+        const confirmationLink = `https://umurava-skill-challenge.netlify.app/confirm/${rawToken}
 		`;
 
         const sendEmailResponse = await transporter.sendMail({
