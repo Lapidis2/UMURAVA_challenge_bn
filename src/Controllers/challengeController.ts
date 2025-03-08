@@ -145,7 +145,7 @@ export const getSingleBlog = async ( req: Request,res: Response)=>{
     if(blog){
       res.status(200).json({blog: blog})
     }else{
-      res.status(404).json({message:"no blog available"})
+      res.status(404).json({message:"no challenge available"})
     }
     
   } catch (error:any) {
@@ -161,11 +161,11 @@ export const deleteBlog = async (req: Request, res: Response) => {
     const deleteD = await blogModal.findByIdAndDelete(id,{new:true});
     if(deleteD){
       res.status(200).json({
-        message:"Blog Delete successfully",
+        message:"Challenge Delete successfully",
       })
     }
     if (!deleteD) {
-      res.status(404).json({ message: "No blog found" });
+      res.status(404).json({ message: "No challenge found" });
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -178,7 +178,7 @@ export const updateBlog = async (req: Request, res: Response) => {
   try {
     const checkBlog = await blogModal.findById(id);
     if (!checkBlog) {
-      return res.status(404).json({ message: "Blog post not found" });
+      return res.status(404).json({ message: "challenge post not found" });
 	}
     const { title, headline, content } = req.body;
       let updateData: any = { title, headline, content };

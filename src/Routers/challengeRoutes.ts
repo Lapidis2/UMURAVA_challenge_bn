@@ -10,7 +10,7 @@ import { upload } from "../Controllers/challengeController";
  *     summary: Create a new blog post
  *     description: Creates a new blog post with a title, headline, content, and imageUrl.
  *     tags:
- *       - Blogs
+ *       - Challenges
  *     requestBody:
  *       required: true
  *       content:
@@ -51,7 +51,7 @@ route.post('/createBlog',upload,createBlog)
  *     summary: Retrieve all blog posts (requires authentication)
  *     description: Fetch a list of all the blog posts available. This endpoint requires a valid token to be accessed.
  *     tags:
- *       - Blogs
+ *       - Challenges
  *     security:
  *       - BearerAuth: []  # This indicates that the endpoint requires a Bearer token for authentication
  *     responses:
@@ -137,7 +137,7 @@ route.get('/getBlogs',isAuthenticated,isAdmin,getBlogs)
  *     summary: Retrieve a single blog post by ID (requires authentication)
  *     description: Fetch a single blog post by its unique ID. This endpoint requires a valid token for authentication.
  *     tags:
- *       - Blogs
+ *       - Challenges
  *     parameters:
  *       - in: path
  *         name: id
@@ -234,7 +234,7 @@ route.get('/getSingleBlog/:id',isAuthenticated,isAdmin,getSingleBlog)
  *     summary: Update an existing blog post
  *     description: Update an existing blog post with new content, title, headline, or imageUrl.
  *     tags:
- *       - Blogs
+ *       - Challenges
  *     parameters:
  *       - name: id
  *         in: path
@@ -283,7 +283,7 @@ route.put('/updateBlog/:id',updateBlog)
  *     summary: Delete a single blog post by ID (requires authentication and admin role)
  *     description: Delete a blog post by its unique ID. This endpoint requires a valid token and the user must be an admin.
  *     tags:
- *       - Blogs
+ *       - Challenges
  *     parameters:
  *       - in: path
  *         name: id
