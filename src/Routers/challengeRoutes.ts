@@ -182,13 +182,15 @@ route.get('/getBlogs',isAuthenticated,isAdmin,getBlogs)
  *                       description: The timestamp when the blog was created
  *                     projectDescription:
  *                       type: string
- *                       description: the news description of project
- * 				       projectBrief:
- *  				     type: string
- *  				     description: the news brief of project
- *    		           projectTasks:
- *   		           type: string
- *                     description:all task information
+ *                       description: The news description of the project
+ *                     projectBrief:
+ *                       type: string
+ *                       description: The news brief of the project
+ *                     projectTasks:
+ *                       type: array
+ *                       description: All task information related to the project
+ *                       items:
+ *                         type: string
  *       401:
  *         description: Unauthorized (invalid or missing token)
  *         content:
@@ -210,26 +212,7 @@ route.get('/getBlogs',isAuthenticated,isAdmin,getBlogs)
  *                   type: string
  *                   example: "Blog not found"
  *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Server error, failed to fetch blog."
- */
-
-/**
- * @swagger
- * components:
- *   securitySchemes:
- *     BearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- */
+ *
 
 route.get('/getSingleBlog/:id',isAuthenticated,isAdmin,getSingleBlog)
 /**
