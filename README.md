@@ -80,6 +80,7 @@ Create a `.yaml` file.
  No need to set up Swagger-related things in `server.ts` again. <br>:warning:
  You must know that YAML strictly follows indentation
 ### Deployed_link:https://umurava-skill-challenge.netlify.app
+### swagger-link:https:https://umurava-challenge-bn.onrender.com/api-docs/
 ## 6.Licensing
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for detail.
