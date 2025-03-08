@@ -20,7 +20,7 @@ import { upload } from "../Controllers/challengeController";
  *           schema:
  *             type: object
  *             required:
- *               - image
+ *               - imageUrl
  *               - title
  *               - duration
  *               - date
@@ -30,7 +30,7 @@ import { upload } from "../Controllers/challengeController";
  *               - projectTasks
  *               - contact
  *             properties:
- *               image:
+ *               imageUrl:
  *                 type: string
  *                 format: binary
  *                 description: The image file to be uploaded for the challenge
