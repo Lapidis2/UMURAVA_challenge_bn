@@ -1,6 +1,6 @@
 # Challenge_backend
 
-This repository contains the backend application of a Umurava challenge developped by Jean Pierre
+This repository contains the backend application of a Umurava challenge developped by CJJ-Team
 [![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
 
 - Table of content
@@ -79,7 +79,7 @@ Create a `.yaml` file.
 - Write your documentation in the file.
  No need to set up Swagger-related things in `server.ts` again. <br>:warning:
  You must know that YAML strictly follows indentation
-### Deployed_link:https://jeanpierreportfolio.netlify.app/
+### Deployed_link:https://umurava-skill-challenge.netlify.app
 ## 6.Licensing
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for detail.
