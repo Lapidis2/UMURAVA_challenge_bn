@@ -5,42 +5,137 @@ const route =express.Router()
 import { upload } from "../Controllers/challengeController";
 /**
  * @swagger
- * /api/Createblog:
+ * /api/createChallenge:
  *   post:
- *     summary: Create a new blog post
- *     description: Creates a new blog post with a title, headline, content, and imageUrl.
+ *     summary: Create a new challenge (requires authentication)
+ *     description: This endpoint allows authenticated users to create a new challenge by providing necessary details.
  *     tags:
  *       - Challenges
+ *     security:
+ *       - BearerAuth: []  # Requires a Bearer token for authentication
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - imageUrl
+ *               - title
+ *               - duration
+ *               - date
+ *               - prize
+ *               - projectBrief
+ *               - projectDescription
+ *               - projectTasks
+ *               - contact
  *             properties:
- *               title:
- *                 type: string
- *                 description: The title of the blog post
- *                 example: "My journey in learning coding!"
- *               headline:
- *                 type: string
- *                 description: The short story of the blog post
- *                 example: "It was not easy to start learning coding for me but....."
- *               content:
- *                 type: string
- *                 description: The main content of the blog post
- *                 example: "It was not easy to start learning coding for me but....."
  *               imageUrl:
  *                 type: string
- *                 format: binary
- *                 description: The image to be uploaded for the blog post.
+ *                 description: URL of the challenge image
+ *                 example: "https://example.com/challenge-image.jpg"
+ *               title:
+ *                 type: string
+ *                 description: The title of the challenge
+ *                 example: "UI/UX Dashboard Design Challenge"
+ *               duration:
+ *                 type: string
+ *                 description: Duration of the challenge
+ *                 example: "15 Days"
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The creation date of the challenge
+ *                 example: "2025-03-08T12:00:00Z"
+ *               prize:
+ *                 type: string
+ *                 description: Prize for the challenge winner
+ *                 example: "$500 cash reward"
+ *               projectBrief:
+ *                 type: string
+ *                 description: A brief summary of the project
+ *                 example: "Create an interactive and user-friendly dashboard for SokoFund."
+ *               projectDescription:
+ *                 type: string
+ *                 description: Detailed description of the challenge
+ *                 example: "Participants need to design a web dashboard with responsive layouts and seamless user experience."
+ *               projectTasks:
+ *                 type: array
+ *                 description: List of tasks required for the challenge
+ *                 items:
+ *                   type: string
+ *                 example: ["Design wireframes", "Create UI components", "Develop front-end"]
+ *               contact:
+ *                 type: string
+ *                 description: Contact information for the challenge
+ *                 example: "challenge@umurava.com"
  *     responses:
  *       201:
- *         description: Blog post created successfully
+ *         description: Challenge created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Challenge created successfully"
+ *                 challenge:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "64a2f45b4d5f3a001c9b0d1e"
+ *                     title:
+ *                       type: string
+ *                       example: "UI/UX Dashboard Design Challenge"
+ *                     duration:
+ *                       type: string
+ *                       example: "15 Days"
+ *                     date:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-03-08T12:00:00Z"
  *       400:
- *         description: Validation error
+ *         description: Bad request (missing or invalid fields)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid input data"
+ *       401:
+ *         description: Unauthorized (invalid or missing token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Unauthorized. Please provide a valid token."
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Server error, failed to create challenge."
+ */
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
 
 route.post('/createBlog',upload,createBlog)
@@ -167,30 +262,23 @@ route.get('/getBlogs',isAuthenticated,isAdmin,getBlogs)
  *                     title:
  *                       type: string
  *                       description: The title of the blog post
- *                     duration:
+ *                     headline:
  *                       type: string
  *                       description: The short story or summary of the blog post
- *                     contact:
+ *                     content:
  *                       type: string
  *                       description: The main content of the blog post
  *                     imageUrl:
  *                       type: string
  *                       description: The URL to the image related to the blog post
- *                     date:
+ *                     createdAt:
  *                       type: string
  *                       format: date-time
  *                       description: The timestamp when the blog was created
- *                     projectDescription:
+ *                     updatedAt:
  *                       type: string
- *                       description: The news description of the project
- *                     projectBrief:
- *                       type: string
- *                       description: The news brief of the project
- *                     projectTasks:
- *                       type: array
- *                       description: All task information related to the project
- *                       items:
- *                         type: string
+ *                       format: date-time
+ *                       description: The timestamp when the blog was last updated
  *       401:
  *         description: Unauthorized (invalid or missing token)
  *         content:
@@ -212,9 +300,28 @@ route.get('/getBlogs',isAuthenticated,isAdmin,getBlogs)
  *                   type: string
  *                   example: "Blog not found"
  *       500:
- *
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Server error, failed to fetch blog."
+ */
 
-route.get('/getSingleBlog/:id',isAuthenticated,isAdmin,getSingleBlog)
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+route.get('/getSingleBlog/:id',getSingleBlog)
 /**
  * @swagger
  * /api/updateblog/{id}:
