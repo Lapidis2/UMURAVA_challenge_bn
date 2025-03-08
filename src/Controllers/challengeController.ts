@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import subscribeModal from "../Models/subscribeModal";
 import nodemailer from "nodemailer"
 import { DecodedUserPayload } from "../middleWare/verifyToken";
+import multer, { diskStorage } from "multer";
+import path from "path";
+import { v2 as cloudinary } from "cloudinary";
  interface AuthenticatedRequest extends Request {
     user?:DecodedUserPayload; 
 }
@@ -13,33 +16,48 @@ dotenv.config();
 interface AuthenticatedRequest extends Request {
   token?: string;
 }
-
+cloudinary.config({
+	cloud_name: process.env.CLOUD_NAME,
+	api_key: process.env.API_KEY,
+	api_secret: process.env.API_SECRET,
+  });
+  const storage = diskStorage({
+	filename: (req: Request, file, cb) => {
+	  cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+	},
+  });
+  export const upload = multer({
+	storage: storage,
+  }).single('imageUrl');
 export const createBlog = async (req: Request, res: Response) => {
 	  try {
-		const { title,deadline,duration,prize,projectDescription,projectTasks,contactEmail,projectBrief } = req.body;
-
+		const { title,date,duration,prize,projectDescription,projectTasks,contact,projectBrief } = req.body;
+        const imageUrl = req.file?.path;
+		console.log('imageurl',imageUrl)
 		if (
+            !imageUrl ||
 			!title ||
-			!deadline ||
+			!date ||
 			!duration ||
 			!prize ||
 			!projectDescription ||
 			!projectTasks ||
-			!contactEmail ||
+			!contact ||
 			!projectBrief
 		  ) {
 		  return res.status(400).json({ message: "fill all required fields" });
 		}
-    
+		const result = await cloudinary.uploader.upload(imageUrl, { folder: "uploads" });
 		const BlogData = new blogModal({
+		  imageUrl: result.secure_url,
 		  title,
 		  duration,
-		  deadline,
+		  date,
 		  prize,
 		  projectBrief,
 		  projectDescription,
 		  projectTasks,
-		  contactEmail
+		  contact
 		});
   
 		const blogs: any = await BlogData.save();
@@ -71,6 +89,7 @@ export const createBlog = async (req: Request, res: Response) => {
 					<div style="font-family: Arial, sans-serif; margin: 0; padding: 10px; background-color: #f4f4f4;">
 					  <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
 						<h1 style="color: #333;">New challenge  Notification</h1>
+						<img src="${BlogData.imageUrl}" alt="Blog Image" style="width: 100%; max-width: 400px; height: auto; margin-bottom: 20px; border-radius: 5px;">
 						<h2 style="font-size: 24px; margin-bottom: 10px;">${BlogData.title}</h2>
 						<p style="color: #666;">Hello there!</p>
 						<p style="color: #666;">We're excited to inform you that a new challenge post has been added to our website.</p>

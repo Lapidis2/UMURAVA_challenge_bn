@@ -1,9 +1,8 @@
 import  express  from "express";
 import { isAuthenticated,isAdmin } from "../middleWare/verifyToken";
 import { createBlog,getBlogs,getSingleBlog,updateBlog,deleteBlog } from "../Controllers/challengeController";
-
 const route =express.Router()
-
+import { upload } from "../Controllers/challengeController";
 /**
  * @swagger
  * /api/Createblog:
@@ -44,7 +43,7 @@ const route =express.Router()
  *         description: Internal server error
  */
 
-route.post('/createBlog',createBlog)
+route.post('/createBlog',upload,createBlog)
 /**
  * @swagger
  * /api/getBlogs:
