@@ -167,23 +167,28 @@ route.get('/getBlogs',isAuthenticated,isAdmin,getBlogs)
  *                     title:
  *                       type: string
  *                       description: The title of the blog post
- *                     headline:
+ *                     duration:
  *                       type: string
  *                       description: The short story or summary of the blog post
- *                     content:
+ *                     contact:
  *                       type: string
  *                       description: The main content of the blog post
  *                     imageUrl:
  *                       type: string
  *                       description: The URL to the image related to the blog post
- *                     createdAt:
+ *                     date:
  *                       type: string
  *                       format: date-time
  *                       description: The timestamp when the blog was created
- *                     updatedAt:
+ *                     projectDescription:
  *                       type: string
- *                       format: date-time
- *                       description: The timestamp when the blog was last updated
+ *                       description: the news description of project
+ * 				       projectBrief:
+ *  				     type: string
+ *  				     description: the news brief of project
+ *    		           projectTasks:
+ *   		           type: string
+ *                     description:all task information
  *       401:
  *         description: Unauthorized (invalid or missing token)
  *         content:
