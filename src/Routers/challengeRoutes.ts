@@ -5,7 +5,7 @@ const route =express.Router()
 import { upload } from "../Controllers/challengeController";
 /**
  * @swagger
- * /api/createChallenge:
+ * /api/createBlog:
  *   post:
  *     summary: Create a new challenge with an image upload (requires authentication)
  *     description: Allows authenticated users to create a challenge with an image upload.
