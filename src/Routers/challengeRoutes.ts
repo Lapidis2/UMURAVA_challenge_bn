@@ -7,8 +7,8 @@ import { upload } from "../Controllers/challengeController";
  * @swagger
  * /api/createChallenge:
  *   post:
- *     summary: Create a new challenge (requires authentication)
- *     description: This endpoint allows authenticated users to create a new challenge by providing necessary details.
+ *     summary: Create a new challenge with an image upload (requires authentication)
+ *     description: Allows authenticated users to create a challenge with an image upload.
  *     tags:
  *       - Challenges
  *     security:
@@ -16,11 +16,11 @@ import { upload } from "../Controllers/challengeController";
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
- *               - imageUrl
+ *               - image
  *               - title
  *               - duration
  *               - date
@@ -30,10 +30,10 @@ import { upload } from "../Controllers/challengeController";
  *               - projectTasks
  *               - contact
  *             properties:
- *               imageUrl:
+ *               image:
  *                 type: string
- *                 description: URL of the challenge image
- *                 example: "https://example.com/challenge-image.jpg"
+ *                 format: binary
+ *                 description: The image file to be uploaded for the challenge
  *               title:
  *                 type: string
  *                 description: The title of the challenge
@@ -96,6 +96,9 @@ import { upload } from "../Controllers/challengeController";
  *                       type: string
  *                       format: date-time
  *                       example: "2025-03-08T12:00:00Z"
+ *                     imageUrl:
+ *                       type: string
+ *                       example: "https://example.com/uploads/challenge-image.jpg"
  *       400:
  *         description: Bad request (missing or invalid fields)
  *         content:
