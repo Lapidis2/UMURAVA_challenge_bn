@@ -34,7 +34,7 @@ export const registerUser = async (req: Request, res: Response) => {
             email,
             password: passwordHash,
             role: role || 'guest',
-            isConfirmed: false,
+            isConfirmed: true,
             confirmationToken: hashedToken,
             confirmationExpires: Date.now() + 24 * 60 * 60 * 1000,
         });
