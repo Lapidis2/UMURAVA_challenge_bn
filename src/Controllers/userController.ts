@@ -12,9 +12,9 @@ dotenv.config();
 // --- REGISTER USER ---
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        const { userName, email, password, role } = req.body;
+        const { username,firstname,lastname,email, password, role } = req.body;
 
-        if (!userName || !email || !password) {
+        if (!username || !email || !password) {
             return res.status(400).json({ message: 'Please fill out all fields' });
         }
 
@@ -28,10 +28,12 @@ export const registerUser = async (req: Request, res: Response) => {
         const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
 
         const newUser = new userModal({
-            userName,
+            username,
+            firstname,
+            lastname,
             email,
             password: passwordHash,
-            role: role || 'talent',
+            role: role || 'guest',
             isConfirmed: false,
             confirmationToken: hashedToken,
             confirmationExpires: Date.now() + 24 * 60 * 60 * 1000,
@@ -58,7 +60,7 @@ export const registerUser = async (req: Request, res: Response) => {
             auth: { user: process.env.ADMIN_EMAIL, pass: process.env.ADMIN_PSWD },
         });
 
-        const confirmationLink = `https://umurava-skill-challenge.netlify.app/confirm/${rawToken}`;
+        const confirmationLink = `https://alx-project-nexus-ecommerce.vercel.app/confirm/${rawToken}`;
         transporter.sendMail({
             from: process.env.ADMIN_EMAIL,
             to: email,
@@ -96,7 +98,7 @@ export const loginUser = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign(
-            { userId: user._id, email: user.email, userName: user.userName, role: user.role },
+            { userId: user._id, email: user.email, username: user.username,firstname:user.firstname,lastname:user.lastname, role: user.role },
             process.env.SECRETE_KEY as string,
             { expiresIn: "1h" }
         );
@@ -106,7 +108,9 @@ export const loginUser = async (req: Request, res: Response) => {
             token,
             user: {
                 id: user._id,
-                userName: user.userName,
+                username: user.username,
+                firstname:user.firstname,
+                lastname:user.lastname,
                 email: user.email,
                 role: user.role,
             }
@@ -152,11 +156,11 @@ export const getSingleUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
-        const { userName, email, role } = req.body;
-        if (!userName && !email) {
+        const { username, email,firstname,lastname, role } = req.body;
+        if (!username && !email) {
             return res.status(400).json({ message: "Invalid input or missing required fields." });
         }
-        const user = await userModal.findByIdAndUpdate(userId, { userName, email, role }, { new: true });
+        const user = await userModal.findByIdAndUpdate(userId, { username,firstname,lastname, email, role }, { new: true });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
