@@ -45,7 +45,7 @@ const userSchema=new mongoose.Schema({
     token:[{type:String}],
     isConfirmed:{
      type: Boolean,
-     default:false
+     default:true
     },
 	confirmationExpires: { type: Date },
 	
