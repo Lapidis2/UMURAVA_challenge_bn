@@ -30,7 +30,7 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        default:'talent'
+        default:'guest'
     },
     token:[{type:String}],
     isConfirmed:{
