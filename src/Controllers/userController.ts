@@ -278,4 +278,16 @@ export const confirmEmail = async (req: Request, res: Response) => {
             confirmationExpires: { $gt: Date.now() },
         });
 
-        if (!user) return res.status(404).json({ message: 'Invalid or expired
+        if (!user) return res.status(404).json({ message: 'Invalid or expired token' });
+
+        user.isConfirmed = true;
+        user.confirmationToken = undefined;
+        user.confirmationExpires = undefined;
+        await user.save();
+
+        res.status(200).json({ message: 'Email confirmed successfully', user });
+    } catch (error: any) {
+        console.error('Error confirming email:', error);
+        res.status(500).json({ message: 'Failed to confirm email', error: error.message });
+    }
+};
