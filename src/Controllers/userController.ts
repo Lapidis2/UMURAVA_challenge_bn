@@ -12,7 +12,7 @@ dotenv.config();
 // --- REGISTER USER ---
 export const registerUser = async (req: Request, res: Response) => {
     try {
-        const { username,firstname,lastname,email, password, role } = req.body;
+        const { username, firstname, lastname, email, password, role } = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ message: 'Please fill out all fields' });
@@ -67,7 +67,7 @@ export const registerUser = async (req: Request, res: Response) => {
             subject: 'Account Confirmation',
             html: `
                 <div>
-                    <p>Dear ${userName},</p>
+                    <p>Dear ${username},</p>
                     <p>Thank you for registering with us.</p>
                     <p>Please click <a href="${confirmationLink}">here</a> to confirm your email address.</p>
                 </div>
@@ -88,17 +88,20 @@ export const loginUser = async (req: Request, res: Response) => {
         }
 
         const user = await userModal.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid email or password.' });
-        }
+        if (!user) return res.status(400).json({ message: 'Invalid email or password.' });
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if (!isPasswordCorrect) {
-            return res.status(400).json({ message: 'Invalid credentials' });
-        }
+        if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials' });
 
         const token = jwt.sign(
-            { userId: user._id, email: user.email, username: user.username,firstname:user.firstname,lastname:user.lastname, role: user.role },
+            {
+                userId: user._id,
+                email: user.email,
+                username: user.username,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                role: user.role
+            },
             process.env.SECRETE_KEY as string,
             { expiresIn: "1h" }
         );
@@ -109,8 +112,8 @@ export const loginUser = async (req: Request, res: Response) => {
             user: {
                 id: user._id,
                 username: user.username,
-                firstname:user.firstname,
-                lastname:user.lastname,
+                firstname: user.firstname,
+                lastname: user.lastname,
                 email: user.email,
                 role: user.role,
             }
@@ -125,10 +128,9 @@ export const loginUser = async (req: Request, res: Response) => {
 // --- GET ALL USERS ---
 export const getAllUser = async (req: Request, res: Response) => {
     try {
-        const users = await userModal.find().select("-Password").sort({ createdAt: -1 });
-        if (!users) {
-            return res.status(404).json({ message: "No registered user found" });
-        }
+        const users = await userModal.find().select("-password").sort({ createdAt: -1 });
+        if (!users) return res.status(404).json({ message: "No registered user found" });
+
         res.status(200).json({ message: "All registered users", users });
     } catch (error) {
         res.status(500).json({ message: "Error while fetching all users" });
@@ -139,13 +141,11 @@ export const getAllUser = async (req: Request, res: Response) => {
 export const getSingleUser = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
-        if (!userId || userId.length !== 24) {
-            return res.status(400).json({ message: "Invalid user ID format." });
-        }
+        if (!userId || userId.length !== 24) return res.status(400).json({ message: "Invalid user ID format." });
+
         const oneUser = await userModal.findById(userId);
-        if (!oneUser) {
-            return res.status(404).json({ message: "User not found" });
-        }
+        if (!oneUser) return res.status(404).json({ message: "User not found" });
+
         res.status(200).json({ oneUser });
     } catch (error) {
         res.status(500).json({ message: "Error while fetching one user" });
@@ -156,14 +156,17 @@ export const getSingleUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
-        const { username, email,firstname,lastname, role } = req.body;
-        if (!username && !email) {
-            return res.status(400).json({ message: "Invalid input or missing required fields." });
-        }
-        const user = await userModal.findByIdAndUpdate(userId, { username,firstname,lastname, email, role }, { new: true });
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
-        }
+        const { username, email, firstname, lastname, role } = req.body;
+        if (!username && !email) return res.status(400).json({ message: "Invalid input or missing required fields." });
+
+        const user = await userModal.findByIdAndUpdate(
+            userId,
+            { username, firstname, lastname, email, role },
+            { new: true }
+        );
+
+        if (!user) return res.status(404).json({ message: "User not found." });
+
         res.status(200).json({ message: "User updated successfully.", user });
     } catch (error) {
         res.status(500).json({ message: "Error updating user" });
@@ -175,9 +178,8 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
         const user = await userModal.findById(userId);
-        if (!user) {
-            return res.status(400).json({ message: 'No user with that ID' });
-        }
+        if (!user) return res.status(400).json({ message: 'No user with that ID' });
+
         await user.deleteOne();
         res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
@@ -209,7 +211,7 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
             from: process.env.ADMIN_EMAIL,
             to: user.email,
             subject: 'Password Reset',
-            text: `Hello ${user.userName},\n\nPlease click the link to reset your password:\nhttp://${req.headers.host}/reset/${token}\n\nIf you did not request this, ignore this email.\n`,
+            text: `Hello ${user.username},\n\nPlease click the link to reset your password:\nhttp://${req.headers.host}/reset/${token}\n\nIf you did not request this, ignore this email.\n`,
         });
 
         res.status(200).json({ message: 'Password reset email sent' });
@@ -251,7 +253,6 @@ export const logout = async (req: Request, res: Response) => {
         const decoded: any = jwt.verify(token, secret);
         const userId = decoded.userId;
         const user = await userModal.findOne({ _id: userId });
-
         if (!user) return res.status(404).json({ message: 'User not found' });
 
         user.token = user.token.filter((t: string) => t !== token);
@@ -277,16 +278,4 @@ export const confirmEmail = async (req: Request, res: Response) => {
             confirmationExpires: { $gt: Date.now() },
         });
 
-        if (!user) return res.status(404).json({ message: 'Invalid or expired token' });
-
-        user.isConfirmed = true;
-        user.confirmationToken = undefined;
-        user.confirmationExpires = undefined;
-        await user.save();
-
-        res.status(200).json({ message: 'Email confirmed successfully', user });
-    } catch (error: any) {
-        console.error('Error confirming email:', error);
-        res.status(500).json({ message: 'Failed to confirm email', error: error.message });
-    }
-};
+        if (!user) return res.status(404).json({ message: 'Invalid or expired
