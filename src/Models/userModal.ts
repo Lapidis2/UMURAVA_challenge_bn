@@ -2,8 +2,10 @@ import mongoose, { mongo } from "mongoose";
 
 interface userModal{
     id:String
-    userName:String,
+    username:String,
     email:String,
+	firstname:String,
+	lastname:String,
     password:string,
     role:String,
     confirmationToken:String,
@@ -16,9 +18,17 @@ interface userModal{
 }
 
 const userSchema=new mongoose.Schema({
-    userName:{
+    username:{
         type:String,
         required:true
+    },
+	 firstname:{
+        type:String,
+        required:false
+    },
+	 lastname:{
+        type:String,
+        required:false
     },
     email:{
         type:String,
