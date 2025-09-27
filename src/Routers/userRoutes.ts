@@ -329,7 +329,7 @@ route.get('/getAllUser',isAuthenticated,isAdmin,getAllUser)
  *       bearerFormat: JWT
  */
 
-route.get('/getSingleUser/:userId',isAuthenticated,isAdmin,getSingleUser)
+route.get('/getSingleUser/:userId',getSingleUser)
 /**
  * @swagger
  * /api/updateUser/{userId}:
